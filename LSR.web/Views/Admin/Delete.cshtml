@@ -1,0 +1,83 @@
+﻿@model LSR.Models.User_InfoSet
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<style>
+    #myform {
+        margin-left: auto;
+        margin-right: auto;
+        display: inlin-block;
+    }
+
+    #btn2, h4, .form-control {
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+<h2>用户注销</h2>
+
+<div>
+    <h4 class="col-3 text-center">用户详细信息</h4>
+    <hr />
+    <dl class="form-horizontal  col-3 text-center" id="myform">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PassWord)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PassWord)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Gender)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gender)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Birthday)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Birthday)
+        </dd>
+
+    </dl>
+        <div class="col-md-1" style="margin-top:10px" id="btn2">
+            <button type="submit" class="btn btn-primary ">注销</button>
+            <a href="~/Admin/Index" type="button" style="margin-left:5px;" class="btn btn-primary">返回</a>
+        </div>
+    }
+</div>
+@section Scripts {
+    @Scripts.Render("~/Scripts/jquery-3.6.0.min.js")
+    @Scripts.Render("~/bundles/jqueryval")
+}

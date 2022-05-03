@@ -1,0 +1,179 @@
+﻿@model LSR.Models.User_InfoSet
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+    .form-signin {
+        width: 100%;
+        max-width: 300px;
+        padding: 15px;
+        margin: auto;
+    }
+
+        .form-signin .checkbox {
+            font-weight: 400;
+        }
+
+        .form-signin .form-floating:focus-within {
+            z-index: 2;
+        }
+
+        .form-signin input[type="text"]{
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .form-signin input[type="password"], .form-signin input[type="number"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+    .btn-sinin {
+        margin-top: 10px
+    }
+</style>
+<div class="container">
+    @using (Html.BeginForm("Create", "User", FormMethod.Post, new { onsubmit = "return False" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <main class="form-signin">
+            <h4>用户注册</h4>
+            <hr />
+            <h4>@ViewBag.msg</h4>
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-floating">
+                <input type="email" class="form-control" id="UserEmail" name="UserEmail" onblur="checkEmail()">
+                <label for="UserEmail">电子邮箱</label>
+                @Html.ValidationMessageFor(model => model.UserEmail, "", new { @class = "text-danger" })
+
+            </div><div id="emailExist" class="text-danger" style="display:none">
+                该邮箱已存在<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z" />
+                </svg>
+            </div>
+            <div id="emailOK" class="text-success" style="display:none">
+                该邮箱可用<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                    <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z" />
+                </svg>
+            </div>
+
+            <div class="form-floating">
+                <input type="password" class="form-control" id="PassWord" name="PassWord">
+                <label for="PassWord">您的密码</label>
+                @Html.ValidationMessageFor(model => model.PassWord, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="rePassword" name="rePassword" required="required">
+                <label for="rePassword">再次输入密码</label>
+                <div id="reP_null" class="text-danger" style="display:none;margin-top:2px;">请再次输入确认密码！</div>
+                <div id="reP_notMatch" class="text-danger" style="display: none; margin-top: 2px;">两次密码输入不一样！</div>
+            </div>
+
+            <div>
+                <button type="button" class="w-100 btn btn-lg btn-primary" onclick="submit_Btn()">注册</button>
+            </div>
+            <div class="btn-sinin">
+                <a href="~/User/Login" type="button" class="w-100 btn btn-lg btn-outline-primary">返回登录</a>
+            </div>
+            <script src="~/Scripts/jquery-3.6.0.min.js"></script>
+            <script type="text/javascript">
+                function submit_Btn() {
+                    var pwd = document.getElementById('PassWord').value;
+                    var pwd2 = document.getElementById('rePassword').value;
+                    var email = $('#UserEmail').val();
+                    if (pwd2 == '') {
+                        document.getElementById('reP_null').setAttribute("style", "display:inline-block;");
+                    }
+                    else if (pwd != pwd2) {
+                        document.getElementById('reP_notMatch').setAttribute("style", "display:inline-block;");
+                    }
+                    else {
+                        var form = document.forms[0];
+                        $.ajax({
+                            url: '../User/EmailAddrAuthentication',
+                            data: 'SinUpEmailAddr=' + email,
+                            type: 'post',
+                            success: (data) => {
+                                form.setAttribute("style", "display:none");
+                                var str = ''; var emailSplit = email.split('\u0040');
+                                var i = 0;
+                                str += email.charAt(0);
+                                for (i = 0; i < emailSplit[0].length - 1; i++) {
+                                    str += '*';
+                                }
+                                str += '\u0040' + emailSplit[1];
+                                $('#emailText').append('<h4>一封邮件已经发送到您的</h4>');
+                                $('#emailText').append('<h4>' + str + '</h4>');
+                                $('#emailText').append('<h4>该邮件包含了您的六位邮箱验证码</h4>');
+                                form.setAttribute('style', 'display:none;');
+                                $('#emailAuthentication').fadeIn();
+                            },
+                            error: (data) => {
+                                alert('请求失败，请稍后重试！');
+                            }
+                        });
+
+                    }
+                }
+                function checkEmail() {
+                    let email = $('#UserEmail').val();
+                    $.ajax({
+                        url: '../User/CheckEmail',
+                        type: 'post',
+                        async: false,
+                        data: 'email=' + email,
+                        success: data => {
+                            eval(data)
+                        }
+                    });
+
+                }
+
+            </script>
+        </main>
+    }
+        <div class="text-center" id="emailText"></div>
+        <div  class="form-signin" id="emailAuthentication" style="display:none">           
+            <div class="form-floating">
+                <input type="number" class="form-control" id="AuthenticationCode" name="AuthenticationCode" required="required">
+                <label for="AuthenticationCode">验证码</label>
+                <div id="codeError" class="text-danger" style="display:none;">验证码错误！</div>
+                <div>
+                    <button class="w-100 btn btn-lg btn-primary" onclick="auBtn()">进行验证</button>
+                </div>
+
+            </div>
+        </div>
+        <script type="text/javascript">
+            function auBtn() {
+                var code = $('#AuthenticationCode').val();
+                console.log(code);
+                if (code != '') {
+                    $.ajax({
+                        url: '../User/codeConfirm',
+                        type: 'post',
+                        data: 'code=' + code,
+                        async: false,
+                        success: (data) => {
+                            eval(data);
+                        },
+                        error: (data) => {
+                            eval(data);
+                        }
+                    });
+                }
+
+            }
+
+
+        </script>
+</div>

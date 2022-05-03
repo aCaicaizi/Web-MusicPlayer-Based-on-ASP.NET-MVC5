@@ -1,0 +1,95 @@
+﻿@model LSR.Models.MusicSet
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #myform {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .form-control {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .form-signin input[type="text"] {
+        margin-bottom: -1px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    .hidden{
+        display:none;
+    }
+</style>
+
+<div class="container">
+    <h4>音乐上传</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <form class="row col-4 " id="myform" method="post" action="Create">
+        <article class="my-3" id="sizing">
+            <div>
+                <div class="bd-example">
+                    <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
+                        <h5>上传音乐文件</h5>
+                    </div>
+                    <div class="mb-3">
+                        <input type="file" id="MusicFile" accept=".mp3" class="form-control form-control-lg" formenctype="multipart/form-data">
+                    </div>
+                    <div id="MusicInput" style="display:none">前端加载成功</div>
+                </div>
+            </div>
+            <div>
+                <div class="bd-example">
+                    <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
+                        <h5>上传歌词文件</h5>
+                    </div>
+                    <div class="mb-3">
+                        <input type="file" id="LyricsFile" accept=".lrc" class="form-control form-control-lg" formenctype="multipart/form-data">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="bd-example">
+                    <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
+                        <h5>上传图片文件</h5>
+                    </div>
+                    <div class="mb-3">
+                        <input type="file" id="ImageFile" accept="image/*" class="form-control form-control-lg" formenctype="multipart/form-data">
+                    </div>
+                    <div id="MusicSuccess" style="display:none">前端上传成功</div>
+                </div>
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" id="MusicName" name="MusicName">
+                <label for="MusicName">歌曲名</label>
+                @Html.ValidationMessageFor(model => model.MusicName, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" id="ArtistName" name="ArtistName">
+                <label for="ArtistName">作者</label>
+                @Html.ValidationMessageFor(model => model.ArtistSet.Name, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" id="AlbumName" name="AlbumName">
+                <label for="AlbumName">专辑</label>
+                @Html.ValidationMessageFor(model => model.AlbumSet.Name, "", new { @class = "text-danger" })
+            </div>
+            <input type="number" class="hidden form-control" id="duration" name="duration">
+        </article>
+
+        <div class="col-md-6">
+            <button type="button" id="Upload_btn" class="btn btn-primary col-12">保存</button>
+        </div>
+        <div class="col-md-6">
+            @Html.ActionLink("返回", "Index", "", new { @class = " btn btn-primary col-12" })
+        </div>
+    </form>
+</div>
+@Scripts.Render("~/Scripts/jquery-3.6.0.min.js")
+<script src="~/js/jsmediatags.min.js"></script>
+<script src="~/js/Upload.js"></script>
+

@@ -1,0 +1,75 @@
+﻿@model IEnumerable<LSR.Models.MusicSet>
+
+@{
+    ViewBag.Title = "UserMusic ";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<h2>@Model.First().User_InfoSet.UserName 已上传的音乐</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.MusicName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Author)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AlbumName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MusicDuration)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UploadDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FileSize)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MusicFormat)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User_InfoSet.UserName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.MusicName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Author)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AlbumName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MusicDuration)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UploadDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FileSize)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MusicFormat)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User_InfoSet.UserName)
+        </td>
+        <td>
+            @Html.ActionLink("编辑", "Edit", new { id=item.MusicId }) |
+            @Html.ActionLink("删除", "Delete", new { id=item.MusicId })
+        </td>
+    </tr>
+}
+
+</table>
+<div class="col-md-1" style="margin-top:10px;margin-left:auto;margin-right:auto;" id="btn2">
+    <a href="~/Admin/Index" type="button" style="margin-left:32px;" class="btn btn-primary">返回</a>
+</div>

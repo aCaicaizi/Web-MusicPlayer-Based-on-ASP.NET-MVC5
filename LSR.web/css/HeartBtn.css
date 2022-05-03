@@ -1,0 +1,37 @@
+﻿svg.two .heart {
+    fill: transparent;
+    stroke: #a00;
+    stroke-width: 6;
+}
+
+svg.two .strahlen {
+    stroke: #f00;
+    stroke-width: 22;
+    stroke-dasharray: 20 78;
+    stroke-dashoffset: 95;
+    opacity: 0;
+}
+
+svg.two.on .strahlen {
+    animation: twoStrahlen 0.6s ease;
+}
+
+svg.two.on .heart {
+    fill: #a00;
+    stroke: #a00;
+    transition: all 0.3s ease;
+}
+
+@keyframes twoStrahlen {
+    0% {
+        opacity: 1;
+    }
+
+    99.9% {
+        stroke-dashoffset: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

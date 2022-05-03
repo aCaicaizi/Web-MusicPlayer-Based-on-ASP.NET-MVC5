@@ -1,0 +1,152 @@
+﻿@model IEnumerable<LSR.Models.MusicSheetSet>
+    
+<li>
+    @Ajax.ActionLink("下一首播放", "AddToPlayList", "Music",
+new { musicId = ViewBag.theMusicId },
+new AjaxOptions { OnSuccess = "DoTipBox('success','添加成功')", OnFailure = "DoTipBox('error','添加失败')" },
+new { @class = "dropdown-item " })<hr />
+</li>
+@foreach (var theSheet in Model)
+{
+
+
+<li>
+    @*@{
+            var musicId = Convert.ToInt64(ViewBag.theMusicName);
+            var log = theSheet.Music_MusicSheet_rel.FirstOrDefault(m => m.MusicId == musicId);
+            var Disabled = "";
+            if (log != null) { Disabled = "disabled"; }
+            Ajax.ActionLink(theSheet.Name, "AddToSheet", "Music",
+        new { musicId = ViewBag.theMusicId, sheetId = theSheet.MusicSheetId },
+        new AjaxOptions { OnSuccess = "SuccessTipBox('添加成功')" },
+        new { @class = "dropdown-item "+"" });
+        }*@
+    @Ajax.ActionLink(theSheet.Name, "AddToSheet", "Music",
+    new { musicId = ViewBag.theMusicId, sheetId = theSheet.MusicSheetId.ToString() },
+    new AjaxOptions { OnSuccess = "DoTipBox('success','添加成功')",OnFailure="DoTipBox('error','添加失败')" },
+    new { @class = "dropdown-item ",id="MusicSheet_"+theSheet.MusicSheetId})
+
+</li>
+            }
+<li><button type="button" class="dropdown-item" onclick="CreateSheetWindow()"><i class="bi bi-plus-square"></i>  添加一个新的歌单</button></li>
+<link href="~/css/alert.min.css" rel="stylesheet" />
+<link href="~/css/alert.ani.min.css" rel="stylesheet" />
+<script src="~/js/zepto.min.js"></script>
+<script src="~/js/TipBox.js"></script>
+<script src="~/js/alert.min.js"></script>
+<script type="text/javascript">
+    $(() => {
+        @foreach(var item in Model)
+        {
+            var musicId = Convert.ToInt64(ViewBag.theMusicId);
+            var log = item.Music_MusicSheet_rel.FirstOrDefault(m => m.MusicId == musicId);
+
+            if (log != null)
+            {
+                    <text>
+        $('#MusicSheet_@item.MusicSheetId').addClass('disabled');
+                    </text>
+            }
+            
+        }
+    })
+    function DoTipBox(t, s) {
+        new TipBox({ type: t, str: s, setTime: 1500 });
+    }
+
+    function CreateSheetWindow() {
+        const tzAlert = new TzAlert({
+            center: true, // 内容居中
+                          // 实例化完成直接显示
+            confirm: {
+                use: true,
+                text: '确认',
+                textColor: '#fff',
+                bgColor: '#0d6efd',
+                radius: '6px',
+                border: '1px solid #0d6efd',
+                shadow: '0px 1px 10px rgba(19, 17, 85, 0.4)',
+                padding: '6px 15px',
+            },
+            cancel: {
+                use: true,
+                text: '取消',
+                textColor: '#333',
+                bgColor: '#fff',
+                border: '1px solid #0d6efd',
+                radius: '6px',
+                shadow: '0px 1px 3px rgba(19, 17, 85, 0.4)',
+                padding: '6px 15px',
+            },
+
+            title: {
+                html: '添加一个新的歌单',
+                color: '#0d6efd',
+                fontSize: '18px',
+            },
+            maskClose: true,
+            copy: {
+                use: false
+            },
+            mask: {
+                use: true,
+                background: 'rgba(0,0,0,.6)'
+            },
+            tips: {
+                html: '我的新歌单'
+            },
+            content: {
+                html: '<input id="InputSheet" type="text" style="min-width: 300px;min-height: 40px;border-radius: 6px;border: 1px solid #3eacff;color: #6a6f77;-web-kit-appearance: none;-moz-appearance: none;display: block;outline: 0;padding: 0 1em;text-decoration: none;width: 80%;"id="SheetName" name="SheetName" required="required" placeholder="给新歌单起个名字吧">'
+            },
+            onEvents:function(e) {
+                if (e.cancel == true) e.ctx.close();
+                if (e.confirm == true) {
+                    confirmBtn(e);
+                }
+
+            }
+
+        });
+        tzAlert.open();
+
+    }
+
+    function confirmBtn(e) {
+        var inputSheet = $('#InputSheet');
+        var sheetName = inputSheet.val();
+        console.log(sheetName);
+        if (sheetName == null || sheetName == "") {
+
+            /*$('#requireText').fadeIn(); alert("输入歌单名！");*/
+            new TipBox({ type: 'error', str: '输入歌单名', setTime: 1500 });
+            e.ctx.close();
+            $('.alert-wrap').remove();
+            $('.alert-mask').remove();
+        }
+        else {
+            $.ajax({
+                url: '../Music/CreateSheet?SheetName=' + sheetName,
+                type: 'post',
+                data: {},
+                contentType: false,
+                processData: false,
+                success: data => {
+                    new TipBox({ type: 'success', str: data, setTime: 1500 });
+                    e.ctx.close();
+                    $('.alert-wrap').remove();
+                    $('.alert-mask').remove();
+                },
+                error: data => {
+                    new TipBox({ type: 'error', str: '歌单已存在', setTime: 1500 });
+                    e.ctx.close();
+                    $('.alert-wrap').remove();
+                    $('.alert-mask').remove();
+                }
+            });
+
+        }
+    }
+       /* inputSheet.val("");*/
+
+</script>
+

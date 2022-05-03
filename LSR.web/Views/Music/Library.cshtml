@@ -1,0 +1,65 @@
+﻿@model IEnumerable<LSR.Models.MusicSet>
+
+@{
+    ViewBag.Title = "Library";
+    Layout = "~/Views/Shared/Player_Layout.cshtml";
+}
+<style>
+    .list-group {
+        width: auto;
+        max-width: 720px;
+        margin: 1px auto;
+    }
+
+    .opacity-50 {
+        opacity: .5;
+    }
+
+    .opacity-75 {
+        opacity: .75;
+    }
+</style>
+<link href="~/css/DownloadBtn.css" rel="stylesheet" />
+<div class="list-group">
+    @foreach (var item in Model)
+    {
+    <div class="list-group-item"  style="display:flex;">
+        <a href="Play?id=@item.MusicId" class=" list-group-item-action d-flex gap-3 py-3" style="text-decoration: none;max-width:560px;" aria-current="true">
+
+            <img src="@System.Configuration.ConfigurationManager.AppSettings["_MusicImagesFolder"]/@item.MusicId&period;jpg" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+            <div class="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                    <h6 class="mb-0">@item.MusicName -@item.Author </h6>
+                    <p class="mb-0 opacity-75">上传者：@item.User_InfoSet.UserName at @item.UploadDate</p>
+                </div>
+                <small class="opacity-50 text-nowrap">@item.MusicDuration</small>
+            </div>
+
+        </a> @*下载按钮*@
+        <div class="dl bg-primary " style="margin:auto">
+            <div class="dl-box">
+                <button class="dl-button " onclick="Download(@item.MusicId)">
+                    <div class="arrow " ></div>
+                </button>
+            </div>
+        </div>
+    </div>
+        @*下载按钮*@
+    } </div>
+<script src="~/Scripts/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    function Download(musicId) {
+        var url = "../Music/Download";
+        var form = $('<form></form>').attr('action', url).attr('method', 'post');
+        form.append($('<input></input>').attr('type', 'hidden').attr('name', 'musicId').attr("id",'musicId').attr('value',musicId));
+        form.appendTo('body').submit().remove();
+    }
+    @*var searchedstr = '@ViewBag.searched';
+    $((searchedstr) => {
+        if(searchedstr!=null)
+        $('#searchBar').val(searchedstr);
+    })*@
+</script>
+
+
+

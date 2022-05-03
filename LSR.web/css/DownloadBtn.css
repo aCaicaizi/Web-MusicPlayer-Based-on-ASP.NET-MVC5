@@ -1,0 +1,100 @@
+
+.dl {
+  --background: #FFFFFF;
+  --border-radius: 3px;
+  --square-size: 70px;
+  --progress-color: linear-gradient(to right top, #00A7FC, #0070ED);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dl .dl-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+.dl .dl-box .dl-button {
+  width: 55px;
+  height: 55px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  background: var(--primary);
+  cursor: pointer;
+}
+.dl .dl-box .dl-button .arrow {
+  position: absolute;
+  top: 20px;
+  width: 2px;
+  height: 15px;
+  background: var(--background);
+  border-radius: var(--border-radius);
+}
+.dl .dl-box .dl-button .arrow:before, .dl .dl-box .dl-button .arrow:after {
+  content: "";
+  display: block;
+  width: 2px;
+  height: 8px;
+  background: var(--background);
+  position: absolute;
+  bottom: 0px;
+  transform-origin: 50% 100%;
+  border-radius: var(--border-radius);
+  transition: background 0.2s ease-in 0.4s;
+}
+.dl .dl-box .dl-button .arrow:before {
+  transform: rotate(-45deg) translateX(25%);
+}
+.dl .dl-box .dl-button .arrow:after {
+  transform: rotate(45deg) translateX(-25%);
+}
+/*.dl .dl-box .dl-button .basket {
+  position: absolute;
+  width: 40px;
+  height: 20px;
+  bottom: 20px;
+  border-radius: var(--border-radius);
+}*/
+/*.dl .dl-box .dl-button .basket:before, .dl .dl-box .dl-button .basket:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  height: 0;
+  width: 0;
+  display: block;
+  opacity: var(--opacity, 0);
+  transition: opacity 0.15s linear;
+  border-bottom: solid 2px var(--primary);
+  box-sizing: border-box;
+}
+.dl .dl-box .dl-button .basket:before {
+  left: calc(40px / 2);
+  border-right: solid 2px var(--primary);
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+.dl .dl-box .dl-button .basket:after {
+  right: calc(40px / 2);
+  border-left: solid 2px var(--primary);
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+}*/
+/*.dl .dl-box .dl-button .basket .basket-top:before, .dl .dl-box .dl-button .basket .basket-top:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  height: 0;
+  width: 0;
+  display: block;
+  border-top: solid 2px var(--primary);*/
+/*}
+.dl .dl-box .dl-button .basket .basket-top:before {
+  left: 2px;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+.dl .dl-box .dl-button .basket .basket-top:after {
+  right: 2px;
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+*/
+

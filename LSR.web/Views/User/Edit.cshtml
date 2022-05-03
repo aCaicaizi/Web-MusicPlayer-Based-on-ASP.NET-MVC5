@@ -1,0 +1,225 @@
+﻿@model LSR.Models.User_InfoSet
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #myform {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .form-control {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .action {
+        width: 400px;
+        height: 30px;
+        margin: 10px 0;
+    }
+
+    #coor {
+        width: 10px;
+        height: 10px;
+        overflow: hidden;
+        cursor: se-resize;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        background-color: #09C;
+    }
+    .container{
+        margin-left:auto;
+        margin-right:auto;
+    }
+</style>
+<link href="~/css/ImageBox.css" rel="stylesheet" />
+<div class="container row">
+    <h4>个人信息</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @*@Html.HiddenFor(model => model.Id)*@
+
+
+    <div class="col-4">
+        <div class="imageBox">
+            <div class="thumbBox hidden">
+
+                <div id="coor"></div>
+            </div>
+
+        </div>
+        <button type="button" id="imgUploadBtn" class="btn btn-outline-primary">修改</button>
+        <div class="action hidden">
+            <input type="file" id="file" style="float:left; width: 250px">
+            <input type="button" id="btnCrop" value="使用" class="btn btn-outline-primary" style="float: right">
+            <input type="button" id="btnZoomIn" class="Btnsty_peyton" value="+">
+            <input type="button" id="btnZoomOut" class="Btnsty_peyton" value="-">
+        </div>
+    </div>
+
+    <form class="row col-4 " id="myform" method="post" action="Edit">
+
+
+        <div class="form-group hidden">
+            @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control col-12" } })
+            @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserName, "用户名", new { @class = "form-label" })
+            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control col-12" } })
+            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-4">
+            <label for="s_Gender" class="form-label">性别</label>
+            <select id="s_Gender" name="Gender" class="form-select ">
+                @if (ViewBag.Gender == "男")
+                {
+                    <option selected value="男">男</option>
+                    <option value="女">女</option>
+                }
+                else
+                {
+                    <option value="男">男</option>
+                    <option selected value="女">女</option>
+                }
+
+            </select>
+        </div>
+        <div class="form-group hidden">
+            @Html.LabelFor(model => model.Gender, "", new { @class = "form-label" })
+            @Html.EditorFor(model => model.Gender, new { htmlAttributes = new { @class = "form-control col-12" } })
+            @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Phone, "电话号码", new { @class = "form-label" })
+            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control col-12" } })
+            @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Birthday, "生日", new { @class = "form-label" })
+            @Html.EditorFor(model => model.Birthday, new { htmlAttributes = new { @class = "col-12 form-control" } })
+            @Html.ValidationMessageFor(model => model.Birthday, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-6">
+            <button type="button" id="submitBtn" class="btn btn-primary">保存</button>
+        </div>
+        <div class="col-md-6">
+            @*@Html.ActionLink("返回", "Index", "Music",new { @class = " btn btn-primary" })*@
+            <a href="~/Music/Index" type="button" class="btn btn-primary">返回</a>
+        </div>
+        <div id="cropped"></div>
+    </form>
+    <div class="col-4"></div>
+</div>
+
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/js/CropBox.js"></script>
+<script type="text/javascript">
+    $(() => {
+        //性别下拉列表的方法
+        $('#Gender').val($('#s_Gender').val());
+        $('#s_Gender').on('change', () => {
+            var gender = $('#s_Gender').val();
+            $('#Gender').val(gender);
+        })
+        //
+
+        //点击图片下面的修改按钮所执行的方法
+        $('#imgUploadBtn').click(() => {
+            $('.thumbBox').fadeIn();
+            $('.action').fadeIn();
+            $('#imgUploadBtn').fadeOut();
+
+        })
+        //
+
+        //图片编辑插件
+        var _URL = window.URL || window.webkitURL;
+        var ImgFile = Base64ToFile('@Session["AvatarBase64"]');
+        var imgURL = _URL.createObjectURL(ImgFile);
+            var options =
+            {
+                thumbBox: '.thumbBox',
+                imgSrc:imgURL
+            }
+        var cropper = $('.imageBox').cropbox(options);
+
+            $('#file').on('change', function () {
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    options.imgSrc = e.target.result;
+                    cropper = $('.imageBox').cropbox(options);
+                }
+            })
+
+            $('#btnCrop').on('click', function () {
+                var img = cropper.getDataURL();
+                var file = Base64ToFile(img);
+
+                options.imgSrc = _URL.createObjectURL(file);
+                cropper = $('.imageBox').cropbox(options);
+
+
+                $('.thumbBox').fadeOut();
+                $('.action').fadeOut();
+                $('#imgUploadBtn').fadeIn();
+                // console.log(_URL.createObjectURL(file))
+                //$.ajax({
+                //    url: '../User/AvatarUpload',
+                //    type: 'post',
+                //    data: {AvatarBase64:img.split(',')[1]},
+                //        contentType: false,
+                //        processData: false,
+                //        success: function (data) {
+                //            console.log(data);
+
+                //            $('#Image').val(data);
+                //        },
+                //        error: function () {
+                //            alert('头像上传失败');
+                //        }
+                //    })
+                $('#Image').val(img);
+            })
+            $('#btnZoomIn').on('click', function () {
+                cropper.zoomIn();
+            })
+            $('#btnZoomOut').on('click', function () {
+                cropper.zoomOut();
+            })
+
+        $('#submitBtn').click(() => {
+            $('#myform').submit();
+            //console.log($('#Image').val());
+        })
+
+        function Base64ToFile(urlData) {
+
+            var bytes = window.atob(urlData.split(',')[1]);        //去掉url的头，并转换为byte
+
+            //处理异常,将ascii码小于0的转换为大于0
+            var ab = new ArrayBuffer(bytes.length);
+            var ia = new Uint8Array(ab);
+            for (var i = 0; i < bytes.length; i++) {
+                ia[i] = bytes.charCodeAt(i);
+            }
+
+            return new Blob([ab], { type: 'image/png' });
+        }
+    })
+</script>

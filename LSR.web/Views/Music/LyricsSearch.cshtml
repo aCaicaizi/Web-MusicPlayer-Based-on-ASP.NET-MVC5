@@ -1,0 +1,17 @@
+﻿@model List<List<string>>
+@foreach(var item in Model)
+ {
+<div class="text-start">
+    <h4>@item[1]  -@item[2]</h4>
+    @foreach (var line in item)
+    {
+        if (item.IndexOf(line) < 3){continue;}
+        else{<p>@line</p>}
+
+        }
+</div>
+<div>
+
+</div>
+    <hr />
+ }
