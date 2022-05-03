@@ -1,0 +1,68 @@
+﻿@model Dictionary<string, string>
+<style>
+    .artist .card-list {
+        background-color: #f9f9f9;
+    }
+
+    .artist .card-image {
+        border-radius: 50%;
+    }
+</style>
+@switch (int.Parse(Model["Type"]))
+{
+    case 1:
+        {
+            <div class="card-list">
+                <figure class="card-image">
+                    <img src="@Model["ImageUrl"]" alt="An orange painted blue, cut in half laying on a blue background" />
+                </figure>
+                <div class="card-header_">
+                    @Html.ActionLink(Model["Content"], "Main", "Music", new { Type = 3, s = Model["Id"] }, new { })
+                    <div class="card-artist"><small>@Model["Small"]</small></div>
+                </div>
+            </div>
+            break;
+        }
+    case 2:
+        {
+            <div class="card-list">
+                <figure class="card-image">
+                    <img src="@Model["ImageUrl"]" alt="An orange painted blue, cut in half laying on a blue background" />
+                </figure>
+                <div class="card-header_">
+                    @Html.ActionLink(Model["Content"], "Main", "Music", new { Type = 6, s = Model["Id"] }, new { })
+                    <div class="card-artist"><small><i class="bi bi-person-fill"></i> @Model["Small"]</small></div>
+                </div>
+            </div>
+            break;
+        }
+    case 3:
+        {
+            <div class="card-list">
+                <figure class="card-image">
+                    <img src="@Model["ImageUrl"]" alt="An orange painted blue, cut in half laying on a blue background" />
+                </figure>
+                <div class="card-header_">
+                    @Html.ActionLink(Model["Content"], "Main", "Music", new { Type = 7, s = Model["Id"] }, new { })
+                    <div class="card-artist"><small><i class="bi bi-person-fill"></i> @Model["Small"]</small></div>
+                </div>
+            </div>
+            break;
+        }
+    case 4:
+        {
+            
+            <div class="card-list artist">
+                <figure class="card-image">
+                    <a href="/LSR/Music/Main?Type=2&s=@Model["Id"]">
+                        <img src="@Model["ImageUrl"]" alt="An orange painted blue, cut in half laying on a blue background" />
+                    </a>
+                </figure>
+                <div class="card-header_">
+                    @Html.ActionLink(Model["Content"], "Main", "Music", new { Type = 2, s = Model["Id"] }, new { })                  
+                </div>
+            </div>
+            break;
+        }
+    default:break;
+}

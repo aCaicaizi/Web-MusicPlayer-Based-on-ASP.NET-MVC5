@@ -1,0 +1,27 @@
+﻿<link href="~/css/reset.min.css" rel="stylesheet" />
+<link href="~/css/Cards.css" rel="stylesheet" />
+
+@switch (ViewBag.type)
+{
+    //专辑
+    case 1:
+        {
+            @model IEnumerable<LSR.Models.AlbumSet>
+            <script type="text/javascript">
+                $(() => {
+                    $('.card-body').addClass("flex-wrap");
+                })
+            </script>
+            foreach (var item in Model)
+            {
+                var dic = new Dictionary<string, string>();
+                dic.Add("ImageUrl", item.Image);
+                dic.Add("Content", item.Name);
+                dic.Add("Small", item.ArtistSet.Name);
+                dic.Add("Type", "1");
+                dic.Add("Id", item.AlbumId.ToString());
+                Html.RenderPartial("SingleCard.cshtml", dic);
+            }
+            break;
+        }
+}

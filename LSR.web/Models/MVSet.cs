@@ -21,8 +21,13 @@ namespace LSR.Models
         public long UserId { get; set; }
         public long MusicId { get; set; }
         public string Image { get; set; }
+        public string MVFile { get; set; }
+        public Nullable<int> StyleId { get; set; }
+        public Nullable<bool> IsChecked { get; set; }
+        public Nullable<bool> IsAvailable { get; set; }
     
         public virtual MusicSet MusicSet { get; set; }
+        public virtual StyleSet StyleSet { get; set; }
         public virtual User_InfoSet User_InfoSet { get; set; }
     }
 }

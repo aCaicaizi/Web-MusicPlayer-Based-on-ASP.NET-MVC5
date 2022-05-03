@@ -1,0 +1,52 @@
+﻿@switch (ViewBag.type)
+{
+    case 1:
+        {
+            @model List<LSR.Models.ArtistSet>
+            <div class="chose">
+
+                @for (int i = 1; i <= 4; i++)
+                {
+                    Html.RenderPartial("SelectBar", new Dictionary<string, int> { { "type", i } });
+                }
+            </div>
+            <div id="searchRegion">
+                @Html.Action("SearchCardView", new { 
+                    Type=1,
+                    Letter="0",
+                    Gender="0",
+                    Region="0",
+                    Style=0
+           })
+            </div>
+            <script type="text/javascript">
+                $(".ul li").click(function () {
+                    $(this).siblings('li').removeClass('act');
+                    $(this).siblings('li').next('li').removeClass('act2');
+                    $(this).addClass('act');
+                    $(this).next('li').addClass('act2');
+
+                    var Letter = $('#Letter>.act').attr('name');
+                    var Gender = $('#Gender>.act').attr('name');
+                    var Style = $('#Style>.act').attr('name');
+                    var Region = $('#Region>.act').attr('name');
+                    $.ajax({
+                        url: '/LSR/Music/SearchCardView',
+                        data: 'Type=1&Letter=' + Letter + '&Gender=' + Gender + '&Style=' + Style + '&Region=' + Region,
+                        type: 'post',
+                        success: data => {
+                            var e = $('#searchRegion');
+                            e.empty();
+                            e.html(data);
+                        },
+                        error: data => {
+                            DoTipBox('error', '发生错误了!');
+                        }
+                    });
+                });
+            </script>
+            break;
+        }
+}
+
+

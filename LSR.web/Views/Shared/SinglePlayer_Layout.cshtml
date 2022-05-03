@@ -5,20 +5,42 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/css/player.css" rel="stylesheet" />
-    <link href="~/css/reset.css" rel="stylesheet" />
     <link href="~/css/iconfont.css" rel="stylesheet" />
     <link href="~/css/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Content/APlayer.min.css" rel="stylesheet" />
+    <link href="~/css/alert.min.css" rel="stylesheet" />
+    <link href="~/css/alert.ani.min.css" rel="stylesheet" />
     <style>
+        body {
+            overflow: hidden;
+        }
     </style>
 </head>
-<body>
-    
-    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
-    <script src="~/Scripts/jquery-3.6.0.min.js"></script>
 
+<body>
+
+    <script src="~/Scripts/jquery-3.6.0.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/jquery.cookie.min.js"></script>
+
+    <script src="~/js/zepto.min.js"></script>
+    <script src="~/js/TipBox.js"></script>
+    <script src="~/js/alert.min.js"></script>
+    <script src="~/Scripts/APlayer.min.js"></script>
+    <script type="text/javascript">
+        $(() => {
+            $.cookie('PlayerWindowName', 'PlayerPage', { path: '/' });
+            window.onunload = () => {
+                $.cookie('PlayerWindowName', null, { expires:-1,path: '/' });
+            };
+        })
+        function DoTipBox(t, s) {
+            new TipBox({ type: t, str: s, setTime: 1500 });
+        }
+    </script>
     <div class="container">
         @RenderBody()
     </div>
+
 </body>
 </html>

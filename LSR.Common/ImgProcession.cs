@@ -16,6 +16,8 @@ namespace LSR.Common
 		{
 			//try
 			//{
+			if (File.Exists(fileFullName))
+			{
 				Bitmap bmp = new Bitmap(fileFullName);
 				MemoryStream ms = new MemoryStream();
 				var suffix = fileFullName.Substring(fileFullName.LastIndexOf('.') + 1,
@@ -36,22 +38,21 @@ namespace LSR.Common
 				ms.Close();
 				string base64String = "data:image/" + suffix + ";base64," + Convert.ToBase64String(arr);
 				return base64String;
-			//}
+				//}
+			}
+			else return null;
 
 			//catch (Exception ex)
 			//{
 			
 			//}
 		}
-		public static string ImageToBase64(string FolderPath, string FileName)
-			{
-				return ImageToBase64(Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["MusicImagesFolder"] + "\\" + music.MusicImage));
-			}
+		
 		public static Image Base64ToImage(string base64)
         {
-			//string[] Splited = base64.Split(',');
-			//base64 = Splited[1];//将base64头部信息替换
-			byte[] bytes = Convert.FromBase64String(base64);
+            string[] Splited = base64.Split(',');
+            base64 = Splited[1];//将base64头部信息替换
+            byte[] bytes = Convert.FromBase64String(base64);
 			MemoryStream memStream = new MemoryStream(bytes);
 			return Image.FromStream(memStream);
 		}

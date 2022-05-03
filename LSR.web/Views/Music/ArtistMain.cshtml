@@ -1,0 +1,175 @@
+﻿@model LSR.Models.ArtistSet
+@{
+    ViewBag.Title = "ArtistMain";
+    Layout = "~/Views/Shared/Player_Layout.cshtml";
+}
+
+<style>
+    .MusicMain > *, .MusicMain {
+        border: 0;
+    }
+
+    .containerCard {
+        max-width: 75%;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .MusicMain {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+        .MusicMain > a > img {
+            width: 200px;
+            aspect-ratio: 1/1;
+            border-radius:50%;
+        }
+
+    .nl {
+        display: block;
+    }
+
+    .Inline {
+        display: inline-block;
+    }
+
+    .mr {
+        margin-right: 50px;
+    }
+
+    .Music-Info {
+        display: inline-block;
+        margin-left: 10px;
+    }
+
+    h {
+        display: block;
+        margin-right: 10px;
+        font-size: 300%;
+        font-weight: 500;
+    }
+
+    .fs-title {
+        font-size: 150%;
+    }
+
+    .fs-info {
+        font-size: 120%
+    }
+
+    .BtnDiv {
+        margin-top: 10px;
+    }
+
+    .m-btn {
+        margin-left: 20px;
+    }
+
+    h2 {
+        color: #0d6efd;
+        margin-bottom:10px;
+        margin-top:10px;
+    }
+    h3{
+
+    }
+    textarea {
+        border-radius: 2px;
+        border: 1px solid #3eacff;
+        color: #6a6f77;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        outline: 0;
+        padding: 0 1em;
+        padding-top: 0.5em;
+        text-decoration: none;
+        width: 100%;
+        height: 100px;
+        text-align: start;
+        overflow: hidden;
+        resize: none;
+    }
+</style>
+<div class="containerCard">
+    <div class="MusicMain">
+        <a>
+            <img src="@Model.Image" />
+        </a>
+        <div class="Music-Info nl">
+            <h>
+                @Model.Name
+            </h>
+            <p class="mr fs-title"><i class="bi bi-info-circle"></i>  @Model.Info</p>
+
+
+        </div>
+
+    </div>
+    <div style="display:block;">
+        <h3 class="Inline"><a href="../Music/Main?Type=2&s=@Model.ArtistId" class="mr">单曲: @Model.MusicSet.Count()</a></h3>
+        <h3 class="Inline"><a href="../Music/Main?Type=4&s=@Model.ArtistId" class="mr">专辑: @Model.AlbumSet.Count()</a></h3>
+        <h3 class="Inline">
+            <a href="../Music/Main?Type=5&s=@Model.ArtistId" class="mr">
+                MV:@{
+                    var mvCounts = 0;
+                    foreach (var item in Model.MusicSet.ToList())
+                    {
+                        mvCounts += item.MVSet.Count();
+                    }
+                    <text>@mvCounts</text>
+                }
+            </a>
+        </h3>
+    </div>
+
+    <div class="BtnDiv">
+        <div class="BtnDiv m-btn Inline">
+            <button type="button" class="btn btn-primary  "><i class="bi bi-play"></i>播放全部</button>
+        </div>
+    </div>
+    @switch (ViewBag.type)
+    {
+        case 1:
+            {
+                <h2>单曲</h2>
+                <text>@Html.Action("MusicSearch", new { s = Model.ArtistId, Type = 2 })</text>
+                break;
+            }
+        case 2:
+            {
+                <h2>专辑</h2>
+                <text>@Html.Action("AlbumSearch", new { s = Model.ArtistId, Type = 2 })</text>
+                break;
+            }
+        case 3:
+            {
+                <h2>MV</h2>
+                <text>@Html.Action("MVSearch", new { s = Model.ArtistId, Type = 2 })</text>
+                break;
+            }
+        default:
+            {
+                <h2>单曲</h2>
+                <text>@Html.Action("MusicSearch", new { s = Model.ArtistId, Type = 2 })</text>
+                break;
+            }
+    }
+
+    <hr />
+
+    <div>
+
+        <h2>
+            评论：
+        </h2>
+        <div>
+            @*<input id="InputSheet" type="text" name="SheetName" required="required" placeholder="快来评论一下吧~">*@
+            <textarea id="CommentText" name="Comment" placeholder="快来评论一下吧~"></textarea>
+            <button type="button" class="btn btn-primary pull-right mt-1">发表评论</button>
+        </div>
+    </div>
+</div>
+

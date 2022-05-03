@@ -24,6 +24,8 @@
           <Property Name="Info" Type="nvarchar(max)" />
           <Property Name="Name" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="Image" Type="varchar(max)" />
+          <Property Name="IsChecked" Type="bit" />
+          <Property Name="IsAvailable" Type="bit" />
         </EntityType>
         <EntityType Name="ArtistSet">
           <Key>
@@ -33,6 +35,23 @@
           <Property Name="Name" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="Info" Type="nvarchar(max)" />
           <Property Name="Image" Type="varchar(max)" />
+          <Property Name="Region" Type="nvarchar" MaxLength="10" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="10" />
+          <Property Name="StyleId" Type="int" />
+          <Property Name="IsChecked" Type="bit" />
+          <Property Name="Initial" Type="nchar" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="CheckSet">
+          <Key>
+            <PropertyRef Name="CheckId" />
+          </Key>
+          <Property Name="CheckId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="int" />
+          <Property Name="ItemId" Type="bigint" />
+          <Property Name="CheckTime" Type="datetime" />
+          <Property Name="UserId" Type="bigint" />
+          <Property Name="SubmitTime" Type="datetime" />
+          <Property Name="ContentText" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="CommentSet">
           <Key>
@@ -42,7 +61,8 @@
           <Property Name="Info" Type="nvarchar(max)" />
           <Property Name="UserId" Type="bigint" Nullable="false" />
           <Property Name="CommentDate" Type="datetime" Nullable="false" />
-          <Property Name="MusicId" Type="bigint" Nullable="false" />
+          <Property Name="Type" Type="bigint" Nullable="false" />
+          <Property Name="IsAvailable" Type="bit" />
         </EntityType>
         <EntityType Name="Music_MusicSheet_rel">
           <Key>
@@ -64,10 +84,12 @@
           <Property Name="UploadDate" Type="datetime" />
           <Property Name="UserId" Type="bigint" />
           <Property Name="FileSize" Type="int" />
-          <Property Name="MusicStyle" Type="nvarchar" MaxLength="50" />
+          <Property Name="StyleId" Type="int" />
           <Property Name="MusicLyrics" Type="varchar(max)" />
           <Property Name="MusicImage" Type="varchar(max)" />
           <Property Name="MusicFile" Type="varchar(max)" />
+          <Property Name="IsChecked" Type="bit" />
+          <Property Name="IsAvailable" Type="bit" />
         </EntityType>
         <EntityType Name="MusicSheetSet">
           <Key>
@@ -79,6 +101,8 @@
           <Property Name="UserId" Type="bigint" Nullable="false" />
           <Property Name="SetDate" Type="datetime" Nullable="false" />
           <Property Name="Image" Type="varchar(max)" />
+          <Property Name="Language" Type="nvarchar" MaxLength="10" />
+          <Property Name="IsAvailable" Type="bit" />
         </EntityType>
         <EntityType Name="MVSet">
           <Key>
@@ -91,16 +115,17 @@
           <Property Name="UserId" Type="bigint" Nullable="false" />
           <Property Name="MusicId" Type="bigint" Nullable="false" />
           <Property Name="Image" Type="varchar(max)" />
+          <Property Name="MVFile" Type="varchar(max)" Nullable="false" />
+          <Property Name="StyleId" Type="int" />
+          <Property Name="IsChecked" Type="bit" />
+          <Property Name="IsAvailable" Type="bit" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
+        <EntityType Name="StyleSet">
           <Key>
-            <PropertyRef Name="diagram_id" />
+            <PropertyRef Name="StyleId" />
           </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
+          <Property Name="StyleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="User_InfoSet">
           <Key>
@@ -151,6 +176,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ArtistSet_StyleSet">
+          <End Role="StyleSet" Type="Self.StyleSet" Multiplicity="0..1" />
+          <End Role="ArtistSet" Type="Self.ArtistSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StyleSet">
+              <PropertyRef Name="StyleId" />
+            </Principal>
+            <Dependent Role="ArtistSet">
+              <PropertyRef Name="StyleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CommentSet_MusicSet">
           <End Role="MusicSet" Type="Self.MusicSet" Multiplicity="1" />
           <End Role="CommentSet" Type="Self.CommentSet" Multiplicity="*" />
@@ -159,7 +196,7 @@
               <PropertyRef Name="MusicId" />
             </Principal>
             <Dependent Role="CommentSet">
-              <PropertyRef Name="MusicId" />
+              <PropertyRef Name="Type" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -223,6 +260,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MusicSet_StyleSet">
+          <End Role="StyleSet" Type="Self.StyleSet" Multiplicity="0..1" />
+          <End Role="MusicSet" Type="Self.MusicSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StyleSet">
+              <PropertyRef Name="StyleId" />
+            </Principal>
+            <Dependent Role="MusicSet">
+              <PropertyRef Name="StyleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MusicSet_User_InfoSet">
           <End Role="User_InfoSet" Type="Self.User_InfoSet" Multiplicity="0..1" />
           <End Role="MusicSet" Type="Self.MusicSet" Multiplicity="*" />
@@ -256,6 +305,18 @@
             </Principal>
             <Dependent Role="MVSet">
               <PropertyRef Name="MusicId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MVSet_StyleSet">
+          <End Role="StyleSet" Type="Self.StyleSet" Multiplicity="0..1" />
+          <End Role="MVSet" Type="Self.MVSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StyleSet">
+              <PropertyRef Name="StyleId" />
+            </Principal>
+            <Dependent Role="MVSet">
+              <PropertyRef Name="StyleId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -335,12 +396,13 @@
           <EntitySet Name="AdminSet" EntityType="Self.AdminSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AlbumSet" EntityType="Self.AlbumSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ArtistSet" EntityType="Self.ArtistSet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CheckSet" EntityType="Self.CheckSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CommentSet" EntityType="Self.CommentSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Music_MusicSheet_rel" EntityType="Self.Music_MusicSheet_rel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MusicSet" EntityType="Self.MusicSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MusicSheetSet" EntityType="Self.MusicSheetSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MVSet" EntityType="Self.MVSet" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StyleSet" EntityType="Self.StyleSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_InfoSet" EntityType="Self.User_InfoSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_Music_Like_rel" EntityType="Self.User_Music_Like_rel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_MusicSheet_rel" EntityType="Self.User_MusicSheet_rel" Schema="dbo" store:Type="Tables" />
@@ -348,6 +410,10 @@
           <AssociationSet Name="FK_AlbumSet_ArtistSet" Association="Self.FK_AlbumSet_ArtistSet">
             <End Role="ArtistSet" EntitySet="ArtistSet" />
             <End Role="AlbumSet" EntitySet="AlbumSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArtistSet_StyleSet" Association="Self.FK_ArtistSet_StyleSet">
+            <End Role="StyleSet" EntitySet="StyleSet" />
+            <End Role="ArtistSet" EntitySet="ArtistSet" />
           </AssociationSet>
           <AssociationSet Name="FK_CommentSet_MusicSet" Association="Self.FK_CommentSet_MusicSet">
             <End Role="MusicSet" EntitySet="MusicSet" />
@@ -373,6 +439,10 @@
             <End Role="ArtistSet" EntitySet="ArtistSet" />
             <End Role="MusicSet" EntitySet="MusicSet" />
           </AssociationSet>
+          <AssociationSet Name="FK_MusicSet_StyleSet" Association="Self.FK_MusicSet_StyleSet">
+            <End Role="StyleSet" EntitySet="StyleSet" />
+            <End Role="MusicSet" EntitySet="MusicSet" />
+          </AssociationSet>
           <AssociationSet Name="FK_MusicSet_User_InfoSet" Association="Self.FK_MusicSet_User_InfoSet">
             <End Role="User_InfoSet" EntitySet="User_InfoSet" />
             <End Role="MusicSet" EntitySet="MusicSet" />
@@ -383,6 +453,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_MVSet_MusicSet" Association="Self.FK_MVSet_MusicSet">
             <End Role="MusicSet" EntitySet="MusicSet" />
+            <End Role="MVSet" EntitySet="MVSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MVSet_StyleSet" Association="Self.FK_MVSet_StyleSet">
+            <End Role="StyleSet" EntitySet="StyleSet" />
             <End Role="MVSet" EntitySet="MVSet" />
           </AssociationSet>
           <AssociationSet Name="FK_MVSet_User_InfoSet" Association="Self.FK_MVSet_User_InfoSet">
@@ -418,12 +492,13 @@
           <EntitySet Name="AdminSet" EntityType="LSRModel.AdminSet" />
           <EntitySet Name="AlbumSet" EntityType="LSRModel.AlbumSet" />
           <EntitySet Name="ArtistSet" EntityType="LSRModel.ArtistSet" />
+          <EntitySet Name="CheckSet" EntityType="LSRModel.CheckSet" />
           <EntitySet Name="CommentSet" EntityType="LSRModel.CommentSet" />
           <EntitySet Name="Music_MusicSheet_rel" EntityType="LSRModel.Music_MusicSheet_rel" />
           <EntitySet Name="MusicSet" EntityType="LSRModel.MusicSet" />
           <EntitySet Name="MusicSheetSet" EntityType="LSRModel.MusicSheetSet" />
           <EntitySet Name="MVSet" EntityType="LSRModel.MVSet" />
-          <EntitySet Name="sysdiagrams" EntityType="LSRModel.sysdiagrams" />
+          <EntitySet Name="StyleSet" EntityType="LSRModel.StyleSet" />
           <EntitySet Name="User_InfoSet" EntityType="LSRModel.User_InfoSet" />
           <EntitySet Name="User_Music_Like_rel" EntityType="LSRModel.User_Music_Like_rel" />
           <EntitySet Name="User_MusicSheet_rel" EntityType="LSRModel.User_MusicSheet_rel" />
@@ -435,6 +510,10 @@
           <AssociationSet Name="FK_MusicSet_AlbumSet" Association="LSRModel.FK_MusicSet_AlbumSet">
             <End Role="AlbumSet" EntitySet="AlbumSet" />
             <End Role="MusicSet" EntitySet="MusicSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArtistSet_StyleSet" Association="LSRModel.FK_ArtistSet_StyleSet">
+            <End Role="StyleSet" EntitySet="StyleSet" />
+            <End Role="ArtistSet" EntitySet="ArtistSet" />
           </AssociationSet>
           <AssociationSet Name="FK_MusicSet_ArtistSet" Association="LSRModel.FK_MusicSet_ArtistSet">
             <End Role="ArtistSet" EntitySet="ArtistSet" />
@@ -456,6 +535,10 @@
             <End Role="MusicSheetSet" EntitySet="MusicSheetSet" />
             <End Role="Music_MusicSheet_rel" EntitySet="Music_MusicSheet_rel" />
           </AssociationSet>
+          <AssociationSet Name="FK_MusicSet_StyleSet" Association="LSRModel.FK_MusicSet_StyleSet">
+            <End Role="StyleSet" EntitySet="StyleSet" />
+            <End Role="MusicSet" EntitySet="MusicSet" />
+          </AssociationSet>
           <AssociationSet Name="FK_MusicSet_User_InfoSet" Association="LSRModel.FK_MusicSet_User_InfoSet">
             <End Role="User_InfoSet" EntitySet="User_InfoSet" />
             <End Role="MusicSet" EntitySet="MusicSet" />
@@ -468,9 +551,17 @@
             <End Role="MusicSet" EntitySet="MusicSet" />
             <End Role="User_Music_Like_rel" EntitySet="User_Music_Like_rel" />
           </AssociationSet>
+          <AssociationSet Name="FK_MusicSheetSet_User_InfoSet" Association="LSRModel.FK_MusicSheetSet_User_InfoSet">
+            <End Role="User_InfoSet" EntitySet="User_InfoSet" />
+            <End Role="MusicSheetSet" EntitySet="MusicSheetSet" />
+          </AssociationSet>
           <AssociationSet Name="FK_User_MusicSheet_rel_MusicSheetSet" Association="LSRModel.FK_User_MusicSheet_rel_MusicSheetSet">
             <End Role="MusicSheetSet" EntitySet="MusicSheetSet" />
             <End Role="User_MusicSheet_rel" EntitySet="User_MusicSheet_rel" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MVSet_StyleSet" Association="LSRModel.FK_MVSet_StyleSet">
+            <End Role="StyleSet" EntitySet="StyleSet" />
+            <End Role="MVSet" EntitySet="MVSet" />
           </AssociationSet>
           <AssociationSet Name="FK_MVSet_User_InfoSet" Association="LSRModel.FK_MVSet_User_InfoSet">
             <End Role="User_InfoSet" EntitySet="User_InfoSet" />
@@ -512,6 +603,8 @@
           <Property Name="Info" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsChecked" Type="Boolean" />
+          <Property Name="IsAvailable" Type="Boolean" />
           <NavigationProperty Name="ArtistSet" Relationship="LSRModel.FK_AlbumSet_ArtistSet" FromRole="AlbumSet" ToRole="ArtistSet" />
           <NavigationProperty Name="MusicSet" Relationship="LSRModel.FK_MusicSet_AlbumSet" FromRole="AlbumSet" ToRole="MusicSet" />
         </EntityType>
@@ -523,8 +616,26 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Info" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Region" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="StyleId" Type="Int32" />
+          <Property Name="IsChecked" Type="Boolean" />
           <NavigationProperty Name="AlbumSet" Relationship="LSRModel.FK_AlbumSet_ArtistSet" FromRole="ArtistSet" ToRole="AlbumSet" />
+          <NavigationProperty Name="StyleSet" Relationship="LSRModel.FK_ArtistSet_StyleSet" FromRole="ArtistSet" ToRole="StyleSet" />
           <NavigationProperty Name="MusicSet" Relationship="LSRModel.FK_MusicSet_ArtistSet" FromRole="ArtistSet" ToRole="MusicSet" />
+          <Property Name="Initial" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CheckSet">
+          <Key>
+            <PropertyRef Name="CheckId" />
+          </Key>
+          <Property Name="CheckId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="ItemId" Type="Int64" />
+          <Property Name="CheckTime" Type="DateTime" Precision="3" />
+          <Property Name="UserId" Type="Int64" />
+          <Property Name="SubmitTime" Type="DateTime" Precision="3" />
+          <Property Name="ContentText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="CommentSet">
           <Key>
@@ -534,7 +645,8 @@
           <Property Name="Info" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UserId" Type="Int64" Nullable="false" />
           <Property Name="CommentDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="MusicId" Type="Int64" Nullable="false" />
+          <Property Name="Type" Type="Int64" Nullable="false" />
+          <Property Name="IsAvailable" Type="Boolean" />
           <NavigationProperty Name="MusicSet" Relationship="LSRModel.FK_CommentSet_MusicSet" FromRole="CommentSet" ToRole="MusicSet" />
           <NavigationProperty Name="User_InfoSet" Relationship="LSRModel.FK_CommentSet_User_InfoSet" FromRole="CommentSet" ToRole="User_InfoSet" />
         </EntityType>
@@ -560,13 +672,17 @@
           <Property Name="UploadDate" Type="DateTime" Precision="3" />
           <Property Name="UserId" Type="Int64" />
           <Property Name="FileSize" Type="Int32" />
-          <Property Name="MusicStyle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StyleId" Type="Int32" />
           <Property Name="MusicLyrics" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="MusicImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MusicFile" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsChecked" Type="Boolean" />
+          <Property Name="IsAvailable" Type="Boolean" />
           <NavigationProperty Name="AlbumSet" Relationship="LSRModel.FK_MusicSet_AlbumSet" FromRole="MusicSet" ToRole="AlbumSet" />
           <NavigationProperty Name="ArtistSet" Relationship="LSRModel.FK_MusicSet_ArtistSet" FromRole="MusicSet" ToRole="ArtistSet" />
           <NavigationProperty Name="CommentSet" Relationship="LSRModel.FK_CommentSet_MusicSet" FromRole="MusicSet" ToRole="CommentSet" />
           <NavigationProperty Name="Music_MusicSheet_rel" Relationship="LSRModel.FK_Music_MusicSheet_rel_MusicSet" FromRole="MusicSet" ToRole="Music_MusicSheet_rel" />
+          <NavigationProperty Name="StyleSet" Relationship="LSRModel.FK_MusicSet_StyleSet" FromRole="MusicSet" ToRole="StyleSet" />
           <NavigationProperty Name="User_InfoSet" Relationship="LSRModel.FK_MusicSet_User_InfoSet" FromRole="MusicSet" ToRole="User_InfoSet" />
           <NavigationProperty Name="MVSet" Relationship="LSRModel.FK_MVSet_MusicSet" FromRole="MusicSet" ToRole="MVSet" />
           <NavigationProperty Name="User_Music_Like_rel" Relationship="LSRModel.FK_User_Music_Like_rel_MusicSet" FromRole="MusicSet" ToRole="User_Music_Like_rel" />
@@ -582,9 +698,12 @@
           <Property Name="UserId" Type="Int64" Nullable="false" />
           <Property Name="SetDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Language" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IsAvailable" Type="Boolean" />
           <NavigationProperty Name="Music_MusicSheet_rel" Relationship="LSRModel.FK_Music_MusicSheet_rel_MusicSheetSet" FromRole="MusicSheetSet" ToRole="Music_MusicSheet_rel" />
           <NavigationProperty Name="User_MusicSheet_rel" Relationship="LSRModel.FK_User_MusicSheet_rel_MusicSheetSet" FromRole="MusicSheetSet" ToRole="User_MusicSheet_rel" />
           <NavigationProperty Name="User_InfoSet" Relationship="LSRModel.FK_MusicSheetSet_User_InfoSet" FromRole="MusicSheetSet" ToRole="User_InfoSet" />
+          <NavigationProperty Name="User_MusicSheet_rel" Relationship="LSRModel.FK_User_MusicSheet_rel_MusicSheetSet" FromRole="MusicSheetSet" ToRole="User_MusicSheet_rel" />
         </EntityType>
         <EntityType Name="MVSet">
           <Key>
@@ -597,18 +716,23 @@
           <Property Name="UserId" Type="Int64" Nullable="false" />
           <Property Name="MusicId" Type="Int64" Nullable="false" />
           <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MVFile" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="StyleId" Type="Int32" />
+          <Property Name="IsChecked" Type="Boolean" />
+          <Property Name="IsAvailable" Type="Boolean" />
           <NavigationProperty Name="MusicSet" Relationship="LSRModel.FK_MVSet_MusicSet" FromRole="MVSet" ToRole="MusicSet" />
+          <NavigationProperty Name="StyleSet" Relationship="LSRModel.FK_MVSet_StyleSet" FromRole="MVSet" ToRole="StyleSet" />
           <NavigationProperty Name="User_InfoSet" Relationship="LSRModel.FK_MVSet_User_InfoSet" FromRole="MVSet" ToRole="User_InfoSet" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
+        <EntityType Name="StyleSet">
           <Key>
-            <PropertyRef Name="diagram_id" />
+            <PropertyRef Name="StyleId" />
           </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="StyleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ArtistSet" Relationship="LSRModel.FK_ArtistSet_StyleSet" FromRole="StyleSet" ToRole="ArtistSet" />
+          <NavigationProperty Name="MusicSet" Relationship="LSRModel.FK_MusicSet_StyleSet" FromRole="StyleSet" ToRole="MusicSet" />
+          <NavigationProperty Name="MVSet" Relationship="LSRModel.FK_MVSet_StyleSet" FromRole="StyleSet" ToRole="MVSet" />
         </EntityType>
         <EntityType Name="User_InfoSet">
           <Key>
@@ -624,6 +748,7 @@
           <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="CommentSet" Relationship="LSRModel.FK_CommentSet_User_InfoSet" FromRole="User_InfoSet" ToRole="CommentSet" />
           <NavigationProperty Name="MusicSet" Relationship="LSRModel.FK_MusicSet_User_InfoSet" FromRole="User_InfoSet" ToRole="MusicSet" />
+          <NavigationProperty Name="MusicSheetSet" Relationship="LSRModel.FK_MusicSheetSet_User_InfoSet" FromRole="User_InfoSet" ToRole="MusicSheetSet" />
           <NavigationProperty Name="MVSet" Relationship="LSRModel.FK_MVSet_User_InfoSet" FromRole="User_InfoSet" ToRole="MVSet" />
           <NavigationProperty Name="User_Music_Like_rel" Relationship="LSRModel.FK_User_Music_Like_rel_User_InfoSet" FromRole="User_InfoSet" ToRole="User_Music_Like_rel" />
           <NavigationProperty Name="User_MusicSheet_rel" Relationship="LSRModel.FK_User_MusicSheet_rel_User_InfoSet" FromRole="User_InfoSet" ToRole="User_MusicSheet_rel" />
@@ -683,6 +808,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ArtistSet_StyleSet">
+          <End Type="LSRModel.StyleSet" Role="StyleSet" Multiplicity="0..1" />
+          <End Type="LSRModel.ArtistSet" Role="ArtistSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StyleSet">
+              <PropertyRef Name="StyleId" />
+            </Principal>
+            <Dependent Role="ArtistSet">
+              <PropertyRef Name="StyleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MusicSet_ArtistSet">
           <End Type="LSRModel.ArtistSet" Role="ArtistSet" Multiplicity="1" />
           <End Type="LSRModel.MusicSet" Role="MusicSet" Multiplicity="*" />
@@ -703,7 +840,7 @@
               <PropertyRef Name="MusicId" />
             </Principal>
             <Dependent Role="CommentSet">
-              <PropertyRef Name="MusicId" />
+              <PropertyRef Name="Type" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -743,6 +880,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MusicSet_StyleSet">
+          <End Type="LSRModel.StyleSet" Role="StyleSet" Multiplicity="0..1" />
+          <End Type="LSRModel.MusicSet" Role="MusicSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StyleSet">
+              <PropertyRef Name="StyleId" />
+            </Principal>
+            <Dependent Role="MusicSet">
+              <PropertyRef Name="StyleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MusicSet_User_InfoSet">
           <End Type="LSRModel.User_InfoSet" Role="User_InfoSet" Multiplicity="0..1" />
           <End Type="LSRModel.MusicSet" Role="MusicSet" Multiplicity="*" />
@@ -779,6 +928,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MusicSheetSet_User_InfoSet">
+          <End Type="LSRModel.User_InfoSet" Role="User_InfoSet" Multiplicity="1" />
+          <End Type="LSRModel.MusicSheetSet" Role="MusicSheetSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User_InfoSet">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="MusicSheetSet">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_MusicSheet_rel_MusicSheetSet">
           <End Type="LSRModel.MusicSheetSet" Role="MusicSheetSet" Multiplicity="1" />
           <End Type="LSRModel.User_MusicSheet_rel" Role="User_MusicSheet_rel" Multiplicity="*" />
@@ -788,6 +949,18 @@
             </Principal>
             <Dependent Role="User_MusicSheet_rel">
               <PropertyRef Name="MusicSheetId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MVSet_StyleSet">
+          <End Type="LSRModel.StyleSet" Role="StyleSet" Multiplicity="0..1" />
+          <End Type="LSRModel.MVSet" Role="MVSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StyleSet">
+              <PropertyRef Name="StyleId" />
+            </Principal>
+            <Dependent Role="MVSet">
+              <PropertyRef Name="StyleId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -870,6 +1043,8 @@
           <EntitySetMapping Name="AlbumSet">
             <EntityTypeMapping TypeName="LSRModel.AlbumSet">
               <MappingFragment StoreEntitySet="AlbumSet">
+                <ScalarProperty Name="IsAvailable" ColumnName="IsAvailable" />
+                <ScalarProperty Name="IsChecked" ColumnName="IsChecked" />
                 <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Info" ColumnName="Info" />
@@ -882,6 +1057,11 @@
           <EntitySetMapping Name="ArtistSet">
             <EntityTypeMapping TypeName="LSRModel.ArtistSet">
               <MappingFragment StoreEntitySet="ArtistSet">
+                <ScalarProperty Name="Initial" ColumnName="Initial" />
+                <ScalarProperty Name="IsChecked" ColumnName="IsChecked" />
+                <ScalarProperty Name="StyleId" ColumnName="StyleId" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Region" ColumnName="Region" />
                 <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Info" ColumnName="Info" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -889,10 +1069,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="CheckSet">
+            <EntityTypeMapping TypeName="LSRModel.CheckSet">
+              <MappingFragment StoreEntitySet="CheckSet">
+                <ScalarProperty Name="ContentText" ColumnName="ContentText" />
+                <ScalarProperty Name="SubmitTime" ColumnName="SubmitTime" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CheckTime" ColumnName="CheckTime" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="CheckId" ColumnName="CheckId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="CommentSet">
             <EntityTypeMapping TypeName="LSRModel.CommentSet">
               <MappingFragment StoreEntitySet="CommentSet">
-                <ScalarProperty Name="MusicId" ColumnName="MusicId" />
+                <ScalarProperty Name="IsAvailable" ColumnName="IsAvailable" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="CommentDate" ColumnName="CommentDate" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Info" ColumnName="Info" />
@@ -912,10 +1106,12 @@
           <EntitySetMapping Name="MusicSet">
             <EntityTypeMapping TypeName="LSRModel.MusicSet">
               <MappingFragment StoreEntitySet="MusicSet">
+                <ScalarProperty Name="IsAvailable" ColumnName="IsAvailable" />
+                <ScalarProperty Name="IsChecked" ColumnName="IsChecked" />
                 <ScalarProperty Name="MusicFile" ColumnName="MusicFile" />
                 <ScalarProperty Name="MusicImage" ColumnName="MusicImage" />
                 <ScalarProperty Name="MusicLyrics" ColumnName="MusicLyrics" />
-                <ScalarProperty Name="MusicStyle" ColumnName="MusicStyle" />
+                <ScalarProperty Name="StyleId" ColumnName="StyleId" />
                 <ScalarProperty Name="FileSize" ColumnName="FileSize" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
@@ -930,6 +1126,8 @@
           <EntitySetMapping Name="MusicSheetSet">
             <EntityTypeMapping TypeName="LSRModel.MusicSheetSet">
               <MappingFragment StoreEntitySet="MusicSheetSet">
+                <ScalarProperty Name="IsAvailable" ColumnName="IsAvailable" />
+                <ScalarProperty Name="Language" ColumnName="Language" />
                 <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="SetDate" ColumnName="SetDate" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -942,6 +1140,10 @@
           <EntitySetMapping Name="MVSet">
             <EntityTypeMapping TypeName="LSRModel.MVSet">
               <MappingFragment StoreEntitySet="MVSet">
+                <ScalarProperty Name="IsAvailable" ColumnName="IsAvailable" />
+                <ScalarProperty Name="IsChecked" ColumnName="IsChecked" />
+                <ScalarProperty Name="StyleId" ColumnName="StyleId" />
+                <ScalarProperty Name="MVFile" ColumnName="MVFile" />
                 <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="MusicId" ColumnName="MusicId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -952,14 +1154,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="LSRModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="definition" ColumnName="definition" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="name" ColumnName="name" />
+          <EntitySetMapping Name="StyleSet">
+            <EntityTypeMapping TypeName="LSRModel.StyleSet">
+              <MappingFragment StoreEntitySet="StyleSet">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="StyleId" ColumnName="StyleId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Main</title>
+    <link href="/LSR/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="/LSR/css/iconfont.css" rel="stylesheet" />
+    <link href="/LSR/css/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/LSR/Content/APlayer.min.css" rel="stylesheet" />
+    <style>
+        body {
+            /* overflow: hidden; */
+        }
+    </style>
+</head>
+
+<body>
+    
+    <script src="/LSR/Scripts/bootstrap.bundle.min.js"></script>
+    <script src="/LSR/Scripts/jquery-3.6.0.min.js"></script>
+    <div class="container">
+        
+
+<link href="/LSR/css/thePlayer.css" rel="stylesheet" />
+<h2>Main</h2>
+
+
+
+
+<div id="PlayList" class="player-list-region">
+    <button type="button" onclick="logging()">log</button>
+</div>
+<div id="LysicsRegion">
+        <ul id="l
+        
+        min-height: 90vh;
+        /* background: #ffffff; */
+        backdrop-filter: blur(50px);
+        background: rgba(0,0,0,0.4);
+        border-radius: 15px;
+        box-sizing: border-box;
+        padding: 20px;
+    </li>
+    <li>
+        [00:04.61]几度风雨几度春秋;
+    </li>
+    <li>
+        [00:12.80]风霜雪雨搏激流;
+    </li>
+    <li>
+        [00:20.56]历尽苦难痴心不改;
+    </li>
+    <li>
+        [00:29.14]少年壮志不言愁;
+    </li>
+    <li>
+        [00:37.53]几度风雨几度春秋;
+    </li>
+    <li>
+        [00:45.80]风霜雪雨搏激流;
+    </li>
+    <li>
+        [00:54.07]历尽苦难痴心不改;
+    </li>
+    <li>
+        [01:02.49]少年壮志不言愁;
+    </li>
+    <li>
+        [01:10.89]金色盾牌;
+    </li>
+    <li>
+        [01:15.15]热血铸就;
+    </li>
+    <li>
+        [01:18.97]危难之处显身手;
+    </li>
+    <li>
+        [01:23.64]显身手;
+    </li>
+    <li>
+        [01:27.31]为了母亲的微笑;
+    </li>
+    <li>
+        [01:32.05]为了大地的丰收;
+    </li>
+    <li>
+        [01:35.72]峥嵘岁月;
+    </li>
+    <li>
+        [01:40.12]何惧风流;
+    </li>
+    <li>
+        [01:46.87]峥嵘岁月;
+    </li>
+    <li>
+        [01:51.34]何惧风流;
+    </li>
+    <li>
+        ;
+    </li>
+    
+</ul>
+    </div>
+
+<div id="myMusicPlayer" class="aplayer" ></div>
+<script src="/LSR/Scripts/APlayer.min.js"></script>
+<script type="text/javascript">
+        const ap = new APlayer({
+            container: document.getElementById('myMusicPlayer'),
+            fixed: false,
+            mutex: true,
+            autoplay: true,
+            loop: 'all',
+            theme: '#FADFA3',
+            volume: 0.5,
+            listFolded: false,
+            listMaxHeight: 90,
+            lrcType: 3,
+            audio: [
+                    {
+                    name: '少年壮志不言愁',
+                    artist: '韩磊',
+                    url: '../MusicFiles/Music/637870874366856034.mp3',
+                    cover: '../MusicFiles/Images/637870874367005631.jpg',
+                    lrc: '../MusicFiles/Lyrics/637870874367005631.lrc',
+                    theme: '#ebd0c2'
+                },
+                    {
+                    name: '真的好想你',
+                    artist: '周冰倩',
+                    url: '../MusicFiles/Music/637876262151251963.mp3',
+                    cover: '../MusicFiles/Images/',
+                    lrc: '../MusicFiles/Lyrics/637876262151790548.lrc',
+                    theme: '#ebd0c2'
+                },
+            ]
+        });
+        function logging() {
+            console.log('currentTime: ' + ap.audio.currentTime);
+            console.log('duration: ' + ap.audio.duration);
+            console.log('paused: ' + ap.audio.paused);
+        }
+    </script>
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<link href="/LSR/css/style.css" rel="stylesheet" />
+<footer class="play-bar">
+    <div class="footer-container">
+        <div class="playing-song">
+            <div class="playing-song-img-container">
+                <img class="playing-song-img" src="images/cover2.jpg" alt="worry-bout-us">
+            </div>
+            <!-- Current Song Playing -->
+            <div class="playing-song-details">
+                <h4>Perfect</h4>
+                <p>Ed Sheeran</p>
+            </div>
+            <script type="text/javascript">
+                
+            </script>
+            <!-- Icons -->
+            <div class="fav-icon-bar">
+                <i class="far fa-heart"></i>
+                <i class="fas fa-ban"></i>
+            </div>
+        </div>
+
+        <!-- ------------------------------Song Controls------------------------- -->
+        <div class="footer-controls">
+            <div class="footer-controls-button">
+                <div class="icon-size" id="  shuffle">
+                    <i class="fas fa-random"></i>
+                </div>
+                <div class="icon-size" id="previous">
+                    <i class="fas fa-backward"></i>
+                </div>
+                <input type="checkbox" id="play-pause">
+                <label for="play-pause">
+                    <div id="play">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div id="pause">
+                        <i class="fas fa-pause"></i>
+                    </div>
+
+                </label>
+                <div class="icon-size" id="next">
+                    <i class="fas fa-forward"></i>
+                </div>
+                <div class="icon-size" id="repeat">
+                    <i class="fas fa-redo"></i>
+                </div>
+
+            </div>
+            <div class="footer-controls-progress">
+                <p class="currentT">00:00</p>
+                <input min="1" max="100" value="1" type="range">
+                <p class="totalT">00:00</p>
+            </div>
+            <script type="text/javascript">
+                $(() => {
+                    
+                        ap.on('loadeddata', function () {
+                            var theDetails = $('.playing-song-details');
+                            theDetails.empty();
+                            theDetails.append('<h4>' + ap.audio.name + '</h4>');
+                            theDetails.append('<p>' + ap.audio.artist + '</p>');
+                            var du = ap.audio.duration;
+                            var m = Math.floor(du/60);
+                            var s = Math.floor((du - m * 60)/1) ;
+                            $('.footer-controls-progress>.totalT').html(m + ':' + s);
+                        })
+                  
+                    var update = ap.on('timeupdate', () => {
+                        var ct = ap.audio.currentTime;
+                        $('.footer-controls-progress>input').val((ct/ap.audio.duration)*100);
+                        var ctm = Math.floor(ct / 60);                        
+                        var cts = Math.floor((ct - ctm * 60) / 1);
+                        $('.footer-controls-progress>.currentT').html(ctm + ':' + cts);                        
+                    });
+                    update;
+                    $('.footer-controls-progress>input').mousedown(() => {
+                        sleep(update, 5000);
+                        $('.footer-controls-progress>input').mouseup(() => {
+                            var currenTime = $('.footer-controls-progress>input').val();
+                            var t = Math.floor(currenTime);
+                            console.log(t);
+
+                            ap.seek(t);
+                        });
+                        wake(update);
+                        
+                    })
+                    
+                    $('#play').click(() => {
+                        ap.toggle();
+                    });
+                    $('#pause').click(() => {
+                        ap.toggle();
+                    });
+                    $('#previous').click(() => {
+                        ap.skipBack();
+                    });
+                    $('#next').click(() => {
+                        ap.skipForward();
+                    });
+
+                })
+
+                function sleep(obj, iMinSecond) {
+                    if (window.eventList == null) {
+                        window.eventList = new Array();
+                    }
+                    var ind = -1;
+                    for (var i = 0; i < window.eventList.length; i++) {
+                        if (window.eventList[i] == null) {
+                            window.eventList[i] = obj;
+                            ind = i;
+                            break;
+                        }
+                    }
+                    if (ind == -1) {
+                        ind = window.eventList.length;
+                        window.eventList[ind] = obj;
+                    }
+                    setTimeout("GoOn(" + ind + ")", iMinSecond);
+                }
+
+                //继续执行  
+                function wake(ind) {
+                    var obj = window.eventList[ind];
+                    window.eventList[ind] = null;
+                    if (obj.NextStep) {
+                        obj.NextStep();
+                    }
+                }
+               
+                
+            </script>
+        </div>
+
+        <div class="sound-controls">
+            <div id="queue">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div id="cast">
+                <i class="fab fa-chromecast"></i>
+            </div>
+
+            <div id="volume-dwn">
+                <i class="fas fa-volume-down"></i>
+            </div>
+            <input class="vol-control" min="1" max="100" value="50" type="range">
+            <div id="volume-up">
+                <i class="fas fa-volume-up"></i>
+            </div>
+            <script type="text/javascript">
+                $(() => {
+                    $('.vol-control').mousedown(() => {
+                        $('.vol-control').mouseup(e => {
+                            var volumValue = e.value;
+                            ap.volume(volumValue / 100, true);
+                        })
+                        
+                        
+                    })
+                })
+
+
+            </script>
+        </div>
+
+        <!-- Queue-button -->
+        <div class="queue-open">
+            <label for="queue-chk">
+                <span>Queue</span>
+                <i class="fas fa-arrows-alt-v"></i>
+            </label>
+        </div>
+    </div>
+    <input id="queue-chk" type="checkbox">
+    
+
+        <hr>
+        <!--<div class="queue-songs-list">-->
+
+            <!-- -------------------------Queue Items----------------------- -->
+            <!--<div class="playing-now queue-song">
+                <div class="queue-img-container">
+                    <img class="queue-img" src="images/cover1.jpg" alt="pain">
+                </div>
+                <div class="queue-song-details">
+                    <h4>Pain  <i class="far fa-heart f1"></i></h4>
+                    <p>Ryan Jones</p>
+                </div>
+            </div>
+
+            <div class="queue-song">
+                <div class="queue-img-container">
+                    <img class="queue-img" src="images/cover2.jpg" alt="perfect">
+                </div>
+                <div class="queue-song-details">
+                    <h4>Perfect <i class="far fa-heart f2"></i></h4>
+                    <p>Ed Sheeran</p>
+                </div>
+            </div>
+
+            <div class="queue-song">
+                <div class="queue-img-container">
+                    <img class="queue-img" src="images/cover4.jpg" alt="for-you">
+                </div>
+                <div class="queue-song-details">
+                    <h4>For You <i class="far fa-heart f3"></i></h4>
+                    <p>Selena Gomez</p>
+                </div>
+            </div>
+
+            <div class="queue-song">
+                <div class="queue-img-container">
+                    <img class="queue-img" src="images/cover5.png" alt="dynamite">
+                </div>
+                <div class="queue-song-details">
+                    <h4>Dynamite <i class="far fa-heart f4"></i></h4>
+                    <p>BTS</p>
+                </div>
+            </div>
+
+            <div class="queue-song">
+                <div class="queue-img-container">
+                    <img class="queue-img" src="images/cover6.png" alt="despacito">
+                </div>
+                <div class="queue-song-details">
+                    <h4>Despacito <i class="far fa-heart f5"></i></h4>
+                    <p>Luis Fonsi</p>
+                </div>
+            </div>
+
+            <div class="queue-song">
+                <div class="queue-img-container">
+                    <img class="queue-img" src="images/cover1.jpg" alt="in-the-end">
+                </div>
+                <div class="queue-song-details">
+                    <h4>Pain <i class="far fa-heart f6"></i></h4>
+                    <p>Ryan Jones</p>
+                </div>
+            </div>
+        </div>-->
+    </div>
+
+</footer>
+<!-- js-info-album-player -->
+
+    </div>
+</body>
+</html>

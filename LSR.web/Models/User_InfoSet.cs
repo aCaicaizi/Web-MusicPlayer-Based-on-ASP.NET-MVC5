@@ -21,25 +21,22 @@ namespace LSR.Models
         {
             this.CommentSet = new HashSet<CommentSet>();
             this.MusicSet = new HashSet<MusicSet>();
+            this.MusicSheetSet = new HashSet<MusicSheetSet>();
             this.MVSet = new HashSet<MVSet>();
             this.User_Music_Like_rel = new HashSet<User_Music_Like_rel>();
             this.User_MusicSheet_rel = new HashSet<User_MusicSheet_rel>();
             this.User_User_rel = new HashSet<User_User_rel>();
-            this.Gender = "男";
-            this.Phone = 0;
-            this.Birthday = new DateTime(2022,1,1);
-            this.UserName = "C" + DateTime.Now.Ticks;
         }
     
         public long UserId { get; set; }
         [Display(Name = "UserName")]
         [Required(ErrorMessage = "请填写用户名")]
         public string UserName { get; set; }
-        [Required(ErrorMessage ="请输入密码")]
+        [Required(ErrorMessage = "请输入密码")]
         [DataType(DataType.Password)]
         [Display(Name = "PassWord")]
         public string PassWord { get; set; }
-        [Required(ErrorMessage ="请选择性别")]
+        [Required(ErrorMessage = "请选择性别")]
         [Display(Name = "Gender")]
         public string Gender { get; set; }
         [DataType(DataType.EmailAddress)]
@@ -54,13 +51,15 @@ namespace LSR.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> Birthday { get; set; }
-        [Display(Name ="Image")]
+        [Display(Name = "Image")]
         public string Image { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CommentSet> CommentSet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MusicSet> MusicSet { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MusicSheetSet> MusicSheetSet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MVSet> MVSet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -69,9 +68,6 @@ namespace LSR.Models
         public virtual ICollection<User_MusicSheet_rel> User_MusicSheet_rel { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User_User_rel> User_User_rel { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MusicSheetSet> MusicSheetSet { get; set; }
-
         internal EditUser Query()
         {
             var queryUser = new EditUser();

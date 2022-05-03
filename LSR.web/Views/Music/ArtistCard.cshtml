@@ -1,18 +1,81 @@
-﻿<style>
-    .littleCard{
-        min-width:700px;
-        min-height:200px;
+﻿@model LSR.Models.ArtistSet
+<style>
+    .littleCard>*,.littleCard{        
         border:0;
     }
-    .littleCard>img{
-        width:160px;
-        aspect-ratio:1/1;
-        border-radius:50%
+    .littleCard{
+        display:flex;
+        align-items:center;
+        margin-bottom:10px;
     }
-</style>
+    .littleCard>a>img{
+        width:96px;
+        aspect-ratio:1/1;
+        border-radius:50%;
+    }
+    .mr{
+        margin-right:20px;
+    }
+    .Artist-Info{
+        display:inline-block;
+        margin-left:10px;
+    }
+    h2 {
+        display: inline;
+        margin-right: 10px;
+        font-size: 120%;
+        font-weight:500;
+    }
+    .BtnDiv{
+        margin-top:10px;
+    }
+</style>                    
 <div class="littleCard">
-    <a href=""><img src=""></a>
-    <div class="row">
-        <div
+    <a href="../Music/Main?Type=2&s=@Model.ArtistId" class=""><img src="@Model.Image"></a>
+    <div class="Artist-Info">
+        <div >
+            <h2>
+                <a href="#" class="">@Model.Name</a>
+            </h2>
+            <a href="../Music/Main?Type=2&s=@Model.ArtistId" class="mr">单曲: @Model.MusicSet.Count()</a>
+            <a href="../Music/Main?Type=4&s=@Model.ArtistId" class="mr">专辑: @Model.AlbumSet.Count()</a>
+            <a href="../Music/Main?Type=5&s=@Model.ArtistId" class="mr">
+                MV:@{
+                    var mvCounts = 0;
+                    foreach (var item in Model.MusicSet.ToList())
+                    {
+                        mvCounts += item.MVSet.Count();
+                    }
+                    <text>@mvCounts</text>
+                }
+            </a>
+        </div>
+        <div class="BtnDiv">
+            <button type="button" class="btn btn-primary" onclick="playAllBtn">播放TA的热门歌曲</button>
+        </div>
     </div>
 </div>
+<script type="text/javascript">
+    function playBtn(id,type) {
+        if ($.cookie('PlayerWindowName') == null)
+            PlayerPage = window.open('/LSR/Player/Main?s=' + e + '&Type=' + t, 'PlayerPage');
+        else {
+            PlayerPage = window.open('', 'PlayerPage')
+        }
+        playAjax(id, type, PlayerPage);
+        
+    }
+    function playAjax(e,t,w) {
+        $.ajax({
+            url: '/LSR/Music/PlayNow',
+            data: 's=' + e + '&Type=' + t,
+            type: 'post',
+            success: data => {
+
+            },
+            error: data => {
+                DoTipBox('error', '播放失败！')
+            }
+        });
+    }    
+</script>

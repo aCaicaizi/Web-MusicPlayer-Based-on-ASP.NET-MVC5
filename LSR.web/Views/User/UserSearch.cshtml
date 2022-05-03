@@ -1,91 +1,187 @@
-﻿@model IEnumerable<LSR.Models.User_InfoSet>
-<style>
-    .avatar{
-        display:block;
-        width:50px;
+﻿@model List<LSR.Models.User_InfoSet>
 
-        aspect-ratio:1/1;
-        border-radius:50%;
-    }
-</style>
-<div class="table-responsive">
-    @*<table class="table table-striped table-sm">
+@switch (ViewBag.type)
+{
+    case 1:
+        {
+            <style>
+                .avatar {
+                    display: block;
+                    width: 50px;
+                    aspect-ratio: 1/1;
+                    border-radius: 50%;
+                }
 
-        <tbody>
-            @foreach (var item in Model)
+                .W25 {
+                    width: 25px;
+                }
+
+                .W35 {
+                    width: 35px;
+                }
+
+                .addBtn {
+                    color: darkgray;
+                    font-size: 25px;
+                }
+
+                .card-body > ul {
+                    min-height: 400px;
+                }
+
+                .btnGroup {
+                    opacity: 0;
+                }
+
+                    .btnGroup:hover {
+                        opacity: 1;
+                    }
+
+                strong {
+                    font-size: 120%;
+                }
+
+                .tb-head > div > div {
+                    align-items: start;
+                }
+
+                .Inline {
+                    display: inline-block !important;
+                }
+
+                .li-mb {
+                    padding: 1.5rem 1rem;
+                }
+
+                .list-group-item {
+                    padding: 1rem 1rem !important;
+                }
+
+                .pd-top-12 {
+                    padding-top: 12px;
+                }
+            </style>
+            <div class="table-responsive">
+                <ul class="list-group list-group-flush">
+                    @foreach (var item in Model)
+                    {
+
+                        <li class="list-group-item li-mb" style="padding:0px;">
+                            <div class="row">
+                                <div class="col-md-6 card-text ">
+                                    <a href="../User/Main?Type=2&s=@item.UserId" class="">
+                                        <img class="avatar Inline" src="@item.Image">
+                                        <div class="Inline">@item.UserName</div>
+                                    </a>
+
+                                </div>
+                                <div class="col-md-2 pd-top-12">歌单：@item.MusicSheetSet.Count()</div>
+                                <div class="col-md-2 pd-top-12" id="FanCount_@item.UserId">粉丝数：@Html.Action("GetFanCountString", new { s = item.UserId })</div>
+                                <div class="col-md-2 pd-top-12 text-end">
+
+                                    @*@if(item.User_User_rel)*@
+                                    @Ajax.ActionLink(" ", "ToggleFollow", "User",
+                                   new { s = item.UserId,type=1 },
+                                   new AjaxOptions
+                                   {
+                                       OnSuccess = $"FollowBtn({item.UserId})",
+                                       HttpMethod = "GET",
+                                       InsertionMode=InsertionMode.Replace,
+                                       UpdateTargetId= $"FanCount_{@item.UserId}"
+                                   },
+                                   new { id = $"FollowBtn_{item.UserId}", type = "button", @class = "follow-btn btn btn-sm" }
+                                   )
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+
+                <div>
+                </div>
+            </div>
+            break;
+        }
+    case 2:
+        {
+            <link href="~/css/reset.min.css" rel="stylesheet" />
+            <link href="~/css/Cards.css" rel="stylesheet" />
+            <script type="text/javascript">
+                $(() => {
+                    $('.card-body').addClass("d-flex flex-wrap mt-3");
+                })
+            </script>
+            //if (ViewBag.type != 1 || Model.IndexOf(item) == 0) { continue; }
+            foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @if (item.Image != null)
-                                {
-                                    var ImagePath = System.Configuration.ConfigurationManager.AppSettings["AvatarFolder_js"] + "/" + item.Image;
-                                    <img class="avatar" src="@ImagePath ">
-                                }
-                                else
-                                {
-                                    var ImagePath = System.Configuration.ConfigurationManager.AppSettings["AvatarFolder_js"] + "/" + System.Configuration.ConfigurationManager.AppSettings["DefaultAvatar"];
-                                    <img class="avatar" src="@ImagePath ">
-                                    }
-                        &nbsp;&nbsp;
-                        @item.UserName
-                    </td>
-                    <td>歌单：@item.User_MusicSheet_rel.Count(s => s.UserId == item.UserId)</td>
-                    <td>粉丝数：@item.User_User_rel.Count(s => s.FollowUserId == item.UserId)</td>
-                    <td>关注：
-                        @if(item.User_User_rel)
-                        @Ajax.ActionLink("+", "Follow", "User",
-                       new AjaxOptions
-                            {
-                           UpdateTargetId = "FollowBtn",
-                           InsertionMode = InsertionMode.Replace,
-                           HttpMethod = "GET"
-                       },
-                       new { id = "FollowBtn", @class = "btn btn-primary btn-sm" }
-                       )
-                        </td>
-                        </tr>
-                        }
-                        </tbody>
-                        </table>*@
-                        <div class="table table-striped table-sm">
-                            <ul class="list-group list-group-flush">
-                                @foreach (var item in Model)
-                                {
-                                    <li class="list-group-item " style="padding:0px;">
-                                        <div class="row">
-                                            <div class="col-md-4 row ">
-                                                <div class="col-md-2">
-                                                    @if (item.Image != null)
-                                                    {
-                                                        var ImagePath = System.Configuration.ConfigurationManager.AppSettings["AvatarFolder_js"] + "/" + item.Image;
-                                                        <img class="avatar" src="@ImagePath ">
-                                                    }
-                                                    else
-                                                    {
-                                                        var ImagePath = System.Configuration.ConfigurationManager.AppSettings["AvatarFolder_js"] + "/" + System.Configuration.ConfigurationManager.AppSettings["DefaultAvatar"];
-                                                        <img class="avatar" src="@ImagePath ">
-                                                    }
-                                                </div>
-                                                <div class="card-text col-md-10">@item.UserName</div>
-                                            </div>
-                                            <div class="col-md-2 card-text">歌单：@item.User_MusicSheet_rel.Count(s => s.UserId == item.UserId)</div>
-                                            <div class="col-md-2 card-text">粉丝数：@item.User_User_rel.Count(s => s.FollowUserId == item.UserId)</div>
-                                            <div class="col-md-4 card-text">
-                                                关注：
-                                                @*@if(item.User_User_rel)*@
-                                                @Ajax.ActionLink("+", "Follow", "User",
-                                               new AjaxOptions
-                                                    {
-                                                   UpdateTargetId = "FollowBtn",
-                                                   InsertionMode = InsertionMode.Replace,
-                                                   HttpMethod = "GET"
-                                               },
-                                               new { id = "FollowBtn", @class = "btn btn-primary btn-sm" }
-                                               )
-                                            </div>
-                                        </div>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                    </div>
+                var dic = new Dictionary<string, string>
+                    ();
+                dic.Add("ImageUrl", item.Image);
+                dic.Add("Content", item.UserName);
+                //dic.Add("Small", $"{item.}");
+                dic.Add("Type", "1");
+                dic.Add("Id", item.UserId.ToString());
+                //TODO:deletThis
+                 <text>@Html.Partial("SingleCard", dic)</text>
+        }
+        break;
+    }
+case 3:
+    {
+        <link href="~/css/reset.min.css" rel="stylesheet" />
+        <link href="~/css/Cards.css" rel="stylesheet" />
+        <script type="text/javascript">
+            $(() => {
+                $('.card-body').addClass("d-flex flex-wrap mt-5");
+            })
+        </script>
+        //if (ViewBag.type != 1 || Model.IndexOf(item) == 0) { continue; }
+        foreach (var item in Model)
+        {
+            var dic = new Dictionary<string, string>
+                ();
+            dic.Add("ImageUrl", item.Image);
+            dic.Add("Content", item.UserName);
+            //dic.Add("Small", $"{item.}");
+            dic.Add("Type", "1");
+            dic.Add("Id", item.UserId.ToString());
+            //TODO:deletThis
+            
+             <text>@Html.Partial("SingleCard", dic)</text>
+            }
+    break;
+}
+}
+<script type="text/javascript">
+    $(() => {
+        $('#FollowBtn_@ViewBag.userId').remove();
+    @foreach (var item in Model)
+    {
+
+        <text>
+        var e = $('#FollowBtn_@item.UserId');
+        if (@Html.Action("IsFollowing_", new { s = item.UserId })) {
+            e.addClass('HasFollowed btn-primary text-white');
+            e.append('<i class="bi bi-check-lg"></i> 已关注');
+        }
+        else
+        {
+        e.addClass('btn-outline-primary text-primary')
+        e.append('<i class="bi bi-plus"></i> 关注');
+        }
+        </text>
+        }
+    })
+    function FollowBtn(s) {
+        var e = $('#FollowBtn_' + s);
+        e.empty();
+        if (e.is('.HasFollowed')) {
+            e.append('<i class="bi bi-plus"></i> 关注');
+        }
+        else {
+            e.append('<i class="bi bi-check-lg"></i> 已关注');
+        }
+        e.toggleClass('HasFollowed btn-primary text-white btn-outline-primary text-primary');
+
+    }
+</script>

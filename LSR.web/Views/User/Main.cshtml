@@ -1,0 +1,154 @@
+﻿@model LSR.Models.User_InfoSet
+@{
+    ViewBag.Title = "Main";
+    Layout = "~/Views/Shared/Player_Layout.cshtml";
+}
+<style>
+    .card-head {
+        background: url('@Model.Image') no-repeat;
+    }
+
+    .user-main-card-head>li>a:link {
+        color: white;
+    }
+
+    .user-main-card-head > li > a:active,
+    .user-main-card-head > li > a:focus,
+    .user-main-card-head > li > a:hover {
+        color: #3eacff;
+    }
+    .nav-item-active {
+        color: #3eacff;
+    }
+</style>
+<link href="~/css/tiktok.css" rel="stylesheet" />
+
+<div class="card-head">
+    <div class="section">
+
+        <div class="pic">
+            <img src="@Model.Image" alt="出错了淦(╯°Д°)╯︵ ┻━┻">
+        </div>
+        @if (Model.UserName.Length < 16)
+        {<div class="name">@Model.UserName</div>}
+    else
+    {<div class="name">@($"{Model.UserName.Take(15).ToString()}+……")</div>}
+        <div class="bottom-section">
+
+            <div class="videos">@Model.MusicSet.Count()<span>上传</span></div>
+            <div class="border"></div>
+            @{
+                var total = Model.User_User_rel.Count();
+                if (total < 10000)
+                {
+                    <div class="subscribers">@total<span>关注</span></div>
+                }
+                else
+                {
+                    var w = total / 10000; var k = (total - w * 10000) / 1000;
+                    <div class="subscribers">@($"{w}.{k}万")"<span>关注</span></div>
+                }
+            }
+
+            <div class="border"></div>
+            <div class="videws">@Html.Action("GetFanCountString", new { s = Model.UserId })<span>粉丝</span></div>
+        </div>
+        <ul class="nav user-main-card-head">
+            @switch (ViewBag.type)
+            {
+                case 1:
+                    {
+                        <li class="nav-item">
+                            @Ajax.ActionLink("我喜欢", "Search", "Music", new { s = Model.UserId, Type = 2 }, new AjaxOptions { OnBegin = "removeFlex()", OnComplete = "AriaActive(1)", UpdateTargetId = "user-main-card-body", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { @class = "nav-link a1" })
+                        </li>
+                        <li class="nav-item">
+                            @Ajax.ActionLink("上传的", "MusicSearch", "Music", new { s = Model.UserId, Type = 6 }, new AjaxOptions { OnBegin = "removeFlex()", OnComplete = "AriaActive(2)", UpdateTargetId = "user-main-card-body", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { @class = "nav-link a2" })
+
+                        </li>
+                        <li class="nav-item">
+                            @Ajax.ActionLink("关注", "UserSearch", "User", new { s = Model.UserId, Type = 2 }, new AjaxOptions { OnComplete = "AriaActive(3)", UpdateTargetId = "user-main-card-body", HttpMethod = "POST", InsertionMode = InsertionMode.Replace }, new { @class = "nav-link a3" })
+
+                        </li>
+                        <li class="nav-item">
+                            @Ajax.ActionLink("创建的歌单", "SheetSearch", "Music", new { s = Model.UserId, Type = 1 }, new AjaxOptions { OnBegin = "removeFlex()", OnComplete = "AriaActive(5)", UpdateTargetId = "user-main-card-body", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { @class = "nav-link a5 " })
+
+                        </li>
+                        <li class="nav-item">
+                            @Ajax.ActionLink("粉丝", "UserSearch", "User", new { s = Model.UserId, Type = 3 }, new AjaxOptions { OnComplete = "AriaActive(4)", UpdateTargetId = "user-main-card-body", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { @class = "nav-link a4" })
+                        </li>
+
+                        <li class="nav-item ">
+                            @Ajax.ActionLink("+ 关注", "LyricsSearch", "Music", new { s = Model.UserId, Type = 1 }, new AjaxOptions { OnComplete = "AriaActive(6)", HttpMethod = "GET" }, new { @class = "nav-link a6" })
+                        </li>
+                        break;
+                    }
+
+                case 2:
+                    {
+                        <li class="nav-item">
+                            @Ajax.ActionLink("我喜欢", "Search", "Music", new { s = Model.UserId, Type = 2 }, new AjaxOptions { OnBegin = "removeFlex()", OnComplete = "AriaActive(1)", UpdateTargetId = "user-main-card-body", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { @class = "nav-link a1" })
+                        </li>
+                        <li class="nav-item">
+                            @Ajax.ActionLink("我上传的", "MusicSearch", "Music", new { s = Model.UserId, Type = 6 }, new AjaxOptions { OnBegin = "removeFlex()", OnComplete = "AriaActive(2)", UpdateTargetId = "user-main-card-body", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { @class = "nav-link a2" })
+
+                        </li>
+                        <li class="nav-item">
+                            @Ajax.ActionLink("我关注的", "UserSearch", "User", new { s = Model.UserId, Type = 2 }, new AjaxOptions { OnComplete = "AriaActive(3)", UpdateTargetId = "user-main-card-body", HttpMethod = "POST", InsertionMode = InsertionMode.Replace }, new { @class = "nav-link a3" })
+
+                        </li>
+                        <li class="nav-item">
+                            @Ajax.ActionLink("我的粉丝", "UserSearch", "User", new { s = Model.UserId, Type = 3 }, new AjaxOptions { OnComplete = "AriaActive(4)", UpdateTargetId = "user-main-card-body", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { @class = "nav-link a4" })
+                        </li>
+                        <li class="nav-item">
+                            @Ajax.ActionLink("我创建的歌单", "SheetSearch", "Music", new { s = Model.UserId, Type = 1 }, new AjaxOptions { OnBegin = "removeFlex()", OnComplete = "AriaActive(5)", UpdateTargetId = "user-main-card-body", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { @class = "nav-link a5 " })
+
+                        </li>
+
+                        break;
+                    }
+                default:
+                    {
+                        <li class="nav-item">
+                            @Ajax.ActionLink("我喜欢", "Search", "Music", new { s = Model.UserId, Type = 2 }, new AjaxOptions { OnBegin="removeFlex()", OnComplete = "AriaActive(1)", UpdateTargetId = "user-main-card-body", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { @class = "nav-link a1" })
+                        </li>
+                        <li class="nav-item">
+                            @Ajax.ActionLink("我上传的", "MusicSearch", "Music", new { s = Model.UserId, Type = 6 }, new AjaxOptions { OnBegin = "removeFlex()", OnComplete = "AriaActive(2)", UpdateTargetId = "user-main-card-body", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { @class = "nav-link a2" })
+
+                        </li>
+                        <li class="nav-item">
+                            @Ajax.ActionLink("我关注的", "UserSearch", "User", new { s = Model.UserId, Type = 2 }, new AjaxOptions { OnComplete = "AriaActive(3)", UpdateTargetId = "user-main-card-body", HttpMethod = "POST", InsertionMode = InsertionMode.Replace }, new { @class = "nav-link a3" })
+
+                        </li>
+                        <li class="nav-item">
+                            @Ajax.ActionLink("我的粉丝", "UserSearch", "User", new { s = Model.UserId, Type = 3 }, new AjaxOptions { OnComplete = "AriaActive(4)", UpdateTargetId = "user-main-card-body", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { @class = "nav-link a4" })
+                        </li>
+                        <li class="nav-item">
+                            @Ajax.ActionLink("我创建的歌单", "SheetSearch", "Music", new { s = Model.UserId, Type = 1 }, new AjaxOptions { OnBegin = "removeFlex()", OnComplete = "AriaActive(5)", UpdateTargetId = "user-main-card-body", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { @class = "nav-link a5 " })
+
+                        </li>
+                        break;
+                    }
+
+
+            }
+
+
+        </ul>
+    </div>
+
+
+</div>
+<div id="user-main-card-body" class="card-body">
+    @Html.Action("Search","Music", new { s = Model.UserId, Type = 2 })
+
+    </div>
+<script type="text/javascript">
+    function AriaActive(e) {
+                //$('.nav-item-active').removeClass('nav-item-active');
+                //$('.a' + e).addClass('nav-item-active');
+
+    }
+    function removeFlex() {
+        $('.card-body').removeClass('d-flex flex-wrap mt-3')
+    }
+</script>

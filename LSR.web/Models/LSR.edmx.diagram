@@ -5,35 +5,39 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="2e80365ae8c148b4a5fe76fe37a43f18" Name="Diagram1" ZoomLevel="74" >
-        <EntityTypeShape EntityType="LSRModel.AdminSet" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="LSRModel.AlbumSet" Width="1.5" PointX="3.75" PointY="12.5" />
-        <EntityTypeShape EntityType="LSRModel.ArtistSet" Width="1.5" PointX="1.5" PointY="12.625" />
-        <EntityTypeShape EntityType="LSRModel.CommentSet" Width="1.5" PointX="3" PointY="5.625" />
-        <EntityTypeShape EntityType="LSRModel.Music_MusicSheet_rel" Width="1.5" PointX="8.25" PointY="8.75" />
-        <EntityTypeShape EntityType="LSRModel.MusicSet" Width="1.5" PointX="6" PointY="7.625" />
-        <EntityTypeShape EntityType="LSRModel.MusicSheetSet" Width="1.5" PointX="6" PointY="3.5" />
-        <EntityTypeShape EntityType="LSRModel.MVSet" Width="1.5" PointX="11.25" PointY="8.375" />
-        <EntityTypeShape EntityType="LSRModel.sysdiagrams" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="LSRModel.User_InfoSet" Width="1.5" PointX="0.75" PointY="8" />
-        <EntityTypeShape EntityType="LSRModel.User_Music_Like_rel" Width="1.5" PointX="8.25" PointY="5.75" />
-        <EntityTypeShape EntityType="LSRModel.User_MusicSheet_rel" Width="1.5" PointX="3" PointY="8.75" />
-        <EntityTypeShape EntityType="LSRModel.User_User_rel" Width="1.5" PointX="3" PointY="19.625" />
+        <EntityTypeShape EntityType="LSRModel.AdminSet" Width="1.5" PointX="3.75" PointY="1" />
+        <EntityTypeShape EntityType="LSRModel.AlbumSet" Width="1.5" PointX="0.75" PointY="4.875" />
+        <EntityTypeShape EntityType="LSRModel.ArtistSet" Width="1.5" PointX="1.5" PointY="0.75" />
+        <EntityTypeShape EntityType="LSRModel.CheckSet" Width="1.5" PointX="3.75" PointY="4" />
+        <EntityTypeShape EntityType="LSRModel.CommentSet" Width="1.5" PointX="5.25" PointY="10" />
+        <EntityTypeShape EntityType="LSRModel.Music_MusicSheet_rel" Width="1.5" PointX="5.25" PointY="17.875" />
+        <EntityTypeShape EntityType="LSRModel.MusicSet" Width="1.5" PointX="3" PointY="8.75" />
+        <EntityTypeShape EntityType="LSRModel.MusicSheetSet" Width="1.5" PointX="3" PointY="20" />
+        <EntityTypeShape EntityType="LSRModel.MVSet" Width="1.5" PointX="8.25" PointY="9.5" />
+        <EntityTypeShape EntityType="LSRModel.StyleSet" Width="1.5" PointX="1.5" PointY="24.25" />
+        <EntityTypeShape EntityType="LSRModel.User_InfoSet" Width="1.5" PointX="0.75" PointY="9.375" />
+        <EntityTypeShape EntityType="LSRModel.User_Music_Like_rel" Width="1.5" PointX="5.25" PointY="7.25" />
+        <EntityTypeShape EntityType="LSRModel.User_MusicSheet_rel" Width="1.5" PointX="5.25" PointY="15.25" />
+        <EntityTypeShape EntityType="LSRModel.User_User_rel" Width="1.5" PointX="3" PointY="17.5" />
         <AssociationConnector Association="LSRModel.FK_AlbumSet_ArtistSet" />
         <AssociationConnector Association="LSRModel.FK_MusicSet_AlbumSet" />
+        <AssociationConnector Association="LSRModel.FK_ArtistSet_StyleSet" />
         <AssociationConnector Association="LSRModel.FK_MusicSet_ArtistSet" />
         <AssociationConnector Association="LSRModel.FK_CommentSet_MusicSet" />
         <AssociationConnector Association="LSRModel.FK_CommentSet_User_InfoSet" />
         <AssociationConnector Association="LSRModel.FK_Music_MusicSheet_rel_MusicSet" />
         <AssociationConnector Association="LSRModel.FK_Music_MusicSheet_rel_MusicSheetSet" />
+        <AssociationConnector Association="LSRModel.FK_MusicSet_StyleSet" />
         <AssociationConnector Association="LSRModel.FK_MusicSet_User_InfoSet" />
         <AssociationConnector Association="LSRModel.FK_MVSet_MusicSet" />
         <AssociationConnector Association="LSRModel.FK_User_Music_Like_rel_MusicSet" />
+        <AssociationConnector Association="LSRModel.FK_MusicSheetSet_User_InfoSet" />
         <AssociationConnector Association="LSRModel.FK_User_MusicSheet_rel_MusicSheetSet" />
+        <AssociationConnector Association="LSRModel.FK_MVSet_StyleSet" />
         <AssociationConnector Association="LSRModel.FK_MVSet_User_InfoSet" />
         <AssociationConnector Association="LSRModel.FK_User_Music_Like_rel_User_InfoSet" />
         <AssociationConnector Association="LSRModel.FK_User_MusicSheet_rel_User_InfoSet" />
         <AssociationConnector Association="LSRModel.FK_User_User_rel_User_InfoSet" />
-        <AssociationConnector Association="LSRModel.FK_MusicSheetSet_User_InfoSet" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

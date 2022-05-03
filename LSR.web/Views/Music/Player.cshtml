@@ -1,0 +1,562 @@
+﻿@model List<LSR.Models.MusicSet>
+@{
+    ViewBag.Title = "天籁之音播放器";
+    Layout = "~/Views/Shared/SinglePlayer_Layout.cshtml";
+}
+
+@*<style>
+        .player-panel-region .audio-btn-group a:link,
+        .player-panel-region .audio-btn-group a:active,
+        .player-panel-region .audio-btn-group a:visited {
+            color: darkgray;
+            text-decoration: none;
+        }
+
+        .player-panel-region .audio-btn-group a:hover {
+            color: #0d6efd;
+            text-decoration: none;
+        }
+    </style>*@
+
+@*列表区域*@
+<style>
+    .container {
+        min-width: 100vw;
+        max-width: 100vw;
+        display:flex;
+    }
+
+    button {
+        cursor: pointer;
+    }
+
+    .player-list-region {
+        width: 66.7vw;
+        padding: 50px 50px;
+        max-height: 90vh;
+    }
+
+    .main-group {
+        min-height: 90vh;
+        /* background: #ffffff; */
+
+        border-radius: 15px;
+        box-sizing: border-box;
+        padding: 20px;
+    }
+
+    .form-group .form {
+        display: flex;
+    }
+
+    .form-group .text-input {
+        flex: 1;
+        border: 1px solid #83dbb3;
+        height: 40px;
+        line-height: 40px;
+        margin-right: 10px;
+        border-radius: 20px;
+        outline: none;
+        font-size: 14px;
+        text-indent: 24px;
+    }
+
+    .form-group .submit-btn {
+        padding: 0 20px;
+        border: 1px solid #83dbb3;
+        background: #fff;
+        color: #4fc08d;
+        border-radius: 20px;
+    }
+
+
+    .items-group {
+        min-height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+        .items-group > li {
+            margin-bottom: 20px;
+        }
+
+            .items-group > li > div,
+            .items-group > li > div > a {
+                color: #000000b8;
+                font-size: 18px;
+                text-decoration: none;
+            }
+                .items-group > li > div >a:hover, .items-group > li > div >a:active {
+                    color: #fb7299;
+                    text-decoration: none;
+                }
+    .heartBtnOn {
+        color: red !important;        
+    }
+        .heartBtnOn:hover {
+            color: darkgrey;
+        }
+
+    .heartBtn:hover{
+        color: #fb7299;
+    }
+
+    #LyricsRegion {
+        width: 32.3vw;
+        text-align: center;
+        padding-top: 80px;
+        max-height: 90vh;
+        color: #000000b8;
+    }
+    #LyricsRegion img{
+        width:15vw;
+        aspect-ratio:1/1;
+    }
+    #LyricsRegion h4{
+        font-size:1.2rem;
+    }
+    #LyricsRegion h5{
+        font-size:0.6rem;
+        padding-left:20px;
+    }
+        #LyricsRegion .aritst {
+            margin-right: 5px;
+            display: inline-block;
+            max-width: 10em;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        #LyricsRegion .album {
+            display: inline-block;
+            max-width: 10em;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        #LyricsRegion a:link {
+            text-decoration: none;
+            color: #000000b8;
+        }
+        #LyricsRegion a:hover,a:active {
+            text-decoration: none;
+            color: #fb7299;
+        }
+    #lyric {
+        padding: 7.2rem 7.2rem;
+        font-size: 0.7rem;
+        height: 15.3rem;
+        overflow: hidden;
+    }
+    #lyric>li{
+        margin-bottom:0.6rem;
+    }
+    .lineheight {
+        font-size: 1.5rem;
+        color: #fb7299;
+    }
+    .linenearheight {
+        font-size: 1.1rem;
+    }
+    .linenotnearheight{
+        font-size:0.9rem
+    }
+</style>
+<div id="PlayList" class="player-list-region">
+    <div class="main-group">
+        <ul class="items-group">
+            <li class="li-mb row">
+                <div class="col-md-1"><input type="checkbox" id="checkbox_all" /></div>
+                <div class="col-md-4 "><strong>歌曲</strong></div>
+                <div class="col-md-2 "></div>
+                <div class="col-md-3 "><strong>歌手</strong></div>
+                <div class="col-md-2 "><strong>时长</strong></div>
+
+            </li>
+            @Html.Action("ListPage","Music")
+
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    $('.Add_Sheet').append('<i class="bi bi-plus-square addBtn"></i>');
+        $('.Download').append('<i class="bi bi-download downloadBtn"></i>');
+        @{
+            var userId =Html.Action("CreateSessionWithCookie","User").ToString();
+            foreach (var item in Model)
+            {
+                if ((_ = item.User_Music_Like_rel.FirstOrDefault(mo => mo.UserId.ToString() == userId)) == null)
+                {
+                <text>
+        $('#Music_@item.MusicId>.btnGroup>.Add_Like').append('<i class="bi bi-heart heartBtn "></i>');
+                </text>
+                }
+                else
+                {
+                <text>
+    $('#Music_@item.MusicId>.btnGroup>.Add_Like').append('<i class="bi bi-heart-fill heartBtnOn "></i>');
+                </text>
+                }
+        }
+        }
+    function Add_Like_Suc_Func(e) {
+        //let Src = $('#Music_' + e + '>.Add_Like>img').attr('src');
+        //if (Src == '../icons/suit-heart.svg') $('#Music_' + e + '>.Add_Like>img').attr('src', '../icons/suit-heart-fill.svg');
+        //else $('#Music_' + e + '>.Add_Like>img').attr('src', '../icons/suit-heart.svg');
+        var t = $('#Music_' + e + '>.Add_Like>i');
+        if (t.is('.heartBtnOn')) {
+            DoTipBox('success', '取消收藏成功');
+        }
+        else DoTipBox('success', '收藏成功');
+        t.toggleClass("heartBtn");
+        t.toggleClass("heartBtnOn");
+        t.toggleClass("bi-heart");
+        t.toggleClass("bi-heart-fill");
+        $('#MyLike_' + e).toggleClass('disabled');
+
+    }
+</script>
+<div id="LyricsRegion">
+    <div>
+        <div class="mb-2">
+            <img src="@Model.First().MusicImage" />
+        </div>
+        <h4>@Model.First().MusicName</h4>
+        <h5>
+            <span class="aritst">歌手：@Html.ActionLink(Model.First().ArtistSet.Name, "Main", "Music", new { Type = 2, s = Model.First().ArtistId }, new { })</span>
+            <span class="album">专辑：@Html.ActionLink(Model.First().AlbumSet.Name, "Main", "Music", new { Type = 3, s = Model.First().AlbumId }, new { })</span>
+        </h5>
+    </div>
+    @*调用歌词分部页面*@
+<textarea id="lrc_content" name="textfield" style="display:none;">
+@Html.Action("LyricsPage","Player", new { s = Model.First().MusicId })
+</textarea>
+    <ul id="lyric">
+    </ul>
+    
+</div>
+
+
+<script src="~/js/PlayListCard.js"></script>
+<script type="text/javascript">
+    //new Action({
+    //    default_item: ['明天你好', 'www.bootstrapmb.COM', '明天你好3', '明天你好4'],//无数据的时候显示
+    //    text_input: $('.text-input'),
+    //    form: $('.form'),
+    //    submit_btn: $('.submit-btn'),
+    //    del_btn: $('.del-btn'),
+    //    items_group: $('.items-group')
+    //});
+</script>
+
+
+<div id="myMusicPlayer" class="aplayer" @*style="display:none;"*@></div>
+<script type="text/javascript">
+        const ap = new APlayer({
+            container: document.getElementById('myMusicPlayer'),
+            fixed: true,
+            mutex: true,
+            autoplay: true,
+            loop: 'all',
+            theme: '#FADFA3',
+            volume: 0.5,
+            listFolded: false,
+            listMaxHeight: 90,
+            lrcType: 3,
+            audio: [
+                @foreach(var item in Model)
+                {
+                    <text>{
+                    name: '@item.MusicName',
+                    artist: '@item.ArtistSet.Name',
+                    url: '@item.MusicFile',
+                    cover: '@item.MusicImage',
+                    lrc: '@item.MusicLyrics',
+                    theme: '#ebd0c2'
+                },</text>
+                }
+            ]
+        });
+</script>
+<script src="~/js/Lyrics.js"></script>
+
+
+@*<script src="~/js/amplitude.js"></script>
+    <script src="~/js/thePlayer.js"></script>*@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<link href="~/css/style.css" rel="stylesheet" />
+<footer class="play-bar">
+    <div class="footer-container">
+        <div class="playing-song">
+            <div class="playing-song-img-container">
+                <img class="playing-song-img" src="@Model.First().MusicImage" alt="worry-bout-us">
+            </div>
+            <!-- Current Song Playing -->
+            <div class="playing-song-details">
+                <h4>@Model.First().MusicName</h4>
+                <p>@Model.First().ArtistSet.Name</p>
+            </div>
+            <script type="text/javascript">
+
+            </script>
+            <!-- Icons -->
+            <div class="fav-icon-bar">
+                <i class="far fa-heart"></i>
+                <i class="fas fa-ban"></i>
+            </div>
+        </div>
+
+        <!-- ------------------------------Song Controls------------------------- -->
+        <div class="footer-controls">
+            <div class="footer-controls-button">
+                <div class="icon-size" id="shuffle">
+                    <i class="fas fa-random"></i>
+                </div>
+                <div class="icon-size" id="previous">
+                    <i class="fas fa-backward"></i>
+                </div>
+                <input type="checkbox" id="play-pause">
+                <label for="play-pause">
+                    <div id="play">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div id="pause">
+                        <i class="fas fa-pause"></i>
+                    </div>
+
+                </label>
+                <div class="icon-size" id="next">
+                    <i class="fas fa-forward"></i>
+                </div>
+                <div class="icon-size" id="repeat">
+                    <i class="fas fa-redo"></i>
+                </div>
+
+            </div>
+            <div class="footer-controls-progress">
+                <p class="currentT">00:00</p>
+                <input min="0" max="100" value="0" type="range">
+                <p class="totalT">
+                    @{
+                        var du = (TimeSpan)Model.First().MusicDuration;
+                        var m = du.Minutes < 10 ? "0" + du.Minutes : du.Minutes.ToString();
+                        var s = du.Seconds < 10 ? "0" + du.Seconds : du.Seconds.ToString();
+                        <text>@($"{m}:{s}")</text>
+                }
+            </p>
+        </div>
+        <script type="text/javascript">
+            $(() => {
+
+                //ap.on('loadeddata', function () {
+                //    //var theDetails = $('.playing-song-details');
+                //    //theDetails.empty();
+                //    //theDetails.append('<h4>' + ap.audio.name + '</h4>');
+                //    //theDetails.append('<p>' + ap.audio.artist + '</p>');
+                //    var du = ap.audio.duration;
+                //    var m = Math.floor(du/60);
+                //    var s = Math.floor((du - m * 60) / 1);
+                //    if (m < 10) var mm = "0" + m; else var mm = m;
+                //    if (s < 10) var ss = "0" + s; else var ss = s;
+                //    $('.footer-controls-progress>.totalT').html( mm+ ':' + ss);
+                //})
+
+                var update = ap.on('timeupdate', () => {
+                    var ct = ap.audio.currentTime;
+                    $('.footer-controls-progress>input').val((ct / ap.audio.duration) * 100);
+                    var ctm = Math.floor(ct / 60);
+                    var cts = Math.floor((ct - ctm * 60) / 1);
+                    $('.footer-controls-progress>.currentT').html(ctm + ':' + cts);
+                });
+                update;
+                $('.footer-controls-progress>input').mousedown(() => {
+                    sleep(update, 5000);
+                    document.getElementsByClassName('.footer-controls-progress>input').oninput(function (e) {
+                        e.style["background-size"] = Math.floor((e.value * 100) / ap.audio.duration) + "% 100%";
+                    })
+                    $('.footer-controls-progress>input').mouseup(() => {
+                        var currenTime = $('.footer-controls-progress>input').val();
+                        var t = Math.floor(currenTime);
+                        console.log(t);
+
+                        ap.seek(t);
+                    });
+                    wake(update);
+
+                })
+
+                $('#play').click(() => {
+                    ap.toggle();
+                });
+                $('#pause').click(() => {
+                    ap.toggle();
+                });
+                $('#previous').click(() => {
+                    ap.skipBack();
+                });
+                $('#next').click(() => {
+                    ap.skipForward();
+                });
+
+            })
+
+            function sleep(obj, iMinSecond) {
+                if (window.eventList == null) {
+                    window.eventList = new Array();
+                }
+                var ind = -1;
+                for (var i = 0; i < window.eventList.length; i++) {
+                    if (window.eventList[i] == null) {
+                        window.eventList[i] = obj;
+                        ind = i;
+                        break;
+                    }
+                }
+                if (ind == -1) {
+                    ind = window.eventList.length;
+                    window.eventList[ind] = obj;
+                }
+                setTimeout("GoOn(" + ind + ")", iMinSecond);
+            }
+
+            //继续执行
+            function wake(ind) {
+                var obj = window.eventList[ind];
+                window.eventList[ind] = null;
+                if (obj.NextStep) {
+                    obj.NextStep();
+                }
+            }
+
+
+        </script>
+    </div>
+
+    <div class="sound-controls">
+        <div id="queue">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div id="cast">
+            <i class="fab fa-chromecast"></i>
+        </div>
+
+        <div id="volume-dwn">
+            <i class="fas fa-volume-down"></i>
+        </div>
+        <input class="vol-control" min="0" max="100" value="50" type="range">
+        <div id="volume-up">
+            <i class="fas fa-volume-up"></i>
+        </div>
+        <script type="text/javascript">
+            $(() => {
+                $('.vol-control').mousedown(e => {
+                    document.getElementsByClassName('.vol-control').oninput(function (e) {
+                        e.style["background-size"] = Math.floor((e.value * 100) / ap.audio.duration) + "% 100%";
+                    })
+                    $('.vol-control').mouseup(e => {
+                        var volumValue = e.value;
+                        ap.volume(volumValue / 100, true);
+                    })
+
+
+                })
+            })
+
+
+        </script>
+    </div>
+
+    <!-- Queue-button -->
+    <div class="queue-open">
+        <label for="queue-chk">
+            <span>Queue</span>
+            <i class="fas fa-arrows-alt-v"></i>
+        </label>
+    </div>
+</div>
+<div class="queue-bottom-section">
+<!--<div class="queue-songs-list">-->
+<!-- -------------------------Queue Items----------------------- -->
+<!--<div class="playing-now queue-song">
+        <div class="queue-img-container">
+            <img class="queue-img" src="images/cover1.jpg" alt="pain">
+        </div>
+        <div class="queue-song-details">
+            <h4>Pain  <i class="far fa-heart f1"></i></h4>
+            <p>Ryan Jones</p>
+        </div>
+    </div>
+
+    <div class="queue-song">
+        <div class="queue-img-container">
+            <img class="queue-img" src="images/cover2.jpg" alt="perfect">
+        </div>
+        <div class="queue-song-details">
+            <h4>Perfect <i class="far fa-heart f2"></i></h4>
+            <p>Ed Sheeran</p>
+        </div>
+    </div>
+
+    <div class="queue-song">
+        <div class="queue-img-container">
+            <img class="queue-img" src="images/cover4.jpg" alt="for-you">
+        </div>
+        <div class="queue-song-details">
+            <h4>For You <i class="far fa-heart f3"></i></h4>
+            <p>Selena Gomez</p>
+        </div>
+    </div>
+
+    <div class="queue-song">
+        <div class="queue-img-container">
+            <img class="queue-img" src="images/cover5.png" alt="dynamite">
+        </div>
+        <div class="queue-song-details">
+            <h4>Dynamite <i class="far fa-heart f4"></i></h4>
+            <p>BTS</p>
+        </div>
+    </div>
+
+    <div class="queue-song">
+        <div class="queue-img-container">
+            <img class="queue-img" src="images/cover6.png" alt="despacito">
+        </div>
+        <div class="queue-song-details">
+            <h4>Despacito <i class="far fa-heart f5"></i></h4>
+            <p>Luis Fonsi</p>
+        </div>
+    </div>
+
+    <div class="queue-song">
+        <div class="queue-img-container">
+            <img class="queue-img" src="images/cover1.jpg" alt="in-the-end">
+        </div>
+        <div class="queue-song-details">
+            <h4>Pain <i class="far fa-heart f6"></i></h4>
+            <p>Ryan Jones</p>
+        </div>
+    </div>
+</div>-->
+
+
+</footer>
+<!-- js-info-album-player -->
+<script type="text/javascript">
+    function PlayNow(e) {
+        for (let v = 0; v <= e.length - 1; v++) {
+
+        }
+    }
+    function updateLyricsRegion(e) {
+        $.ajax({
+            type: 'post',
+            data: 's=' + e,
+            url: '/LSR/Player/LyricsPage',
+            success: data => {
+                $('#lrc_content').html(data);
+                createLrc();
+            }
+
+        })
+    }
+</script>

@@ -18,7 +18,8 @@ namespace LSR.Models
         public string Info { get; set; }
         public long UserId { get; set; }
         public System.DateTime CommentDate { get; set; }
-        public long MusicId { get; set; }
+        public long Type { get; set; }
+        public Nullable<bool> IsAvailable { get; set; }
     
         public virtual MusicSet MusicSet { get; set; }
         public virtual User_InfoSet User_InfoSet { get; set; }

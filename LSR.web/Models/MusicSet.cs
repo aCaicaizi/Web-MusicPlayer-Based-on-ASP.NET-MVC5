@@ -25,23 +25,21 @@ namespace LSR.Models
         }
     
         public long MusicId { get; set; }
-
-        [Display(Name ="歌曲")]
+        [Display(Name = "歌曲")]
         public string MusicName { get; set; }
-
         public long ArtistId { get; set; }
-
-        
         public Nullable<long> AlbumId { get; set; }
-        [Display (Name = "时长")]
+        [Display(Name = "时长")]
         public Nullable<System.TimeSpan> MusicDuration { get; set; }
         public Nullable<System.DateTime> UploadDate { get; set; }
         public Nullable<long> UserId { get; set; }
         public Nullable<int> FileSize { get; set; }
-        public string MusicStyle { get; set; }
+        public Nullable<int> StyleId { get; set; }
         public string MusicLyrics { get; set; }
         public string MusicImage { get; set; }
         public string MusicFile { get; set; }
+        public Nullable<bool> IsChecked { get; set; }
+        public Nullable<bool> IsAvailable { get; set; }
     
         public virtual AlbumSet AlbumSet { get; set; }
         public virtual ArtistSet ArtistSet { get; set; }
@@ -49,6 +47,7 @@ namespace LSR.Models
         public virtual ICollection<CommentSet> CommentSet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Music_MusicSheet_rel> Music_MusicSheet_rel { get; set; }
+        public virtual StyleSet StyleSet { get; set; }
         public virtual User_InfoSet User_InfoSet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MVSet> MVSet { get; set; }

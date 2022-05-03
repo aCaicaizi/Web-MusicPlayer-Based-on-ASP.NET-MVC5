@@ -11,18 +11,24 @@
     <link href="~/css/font/bootstrap-icons.css" rel="stylesheet" />
     <style>
         body {
-            padding-top: 3rem;
             padding-bottom: 3rem;
             color: #5a5a5a;
+            background: #f9f9f9;
+            overflow-x:hidden;
         }
 
+        header {
+            min-height: 8rem;
+            z-index: 10;
+            background:white;,
+        }
         .form-control-dark {
             color: #fff;
             background-color: var(--bs-dark);
             border-color: var(--bs-gray);
         }
 
-            .form-control-dark:focus {
+        .form-control-dark:focus {
                 color: #fff;
                 background-color: var(--bs-dark);
                 border-color: #fff;
@@ -49,13 +55,34 @@
         .cai {
             font-size: 30px;
         }
+
+        a:link,a:visited{
+            color:inherit;
+            text-decoration:none;
+        }
+        a:hover, a:active {
+            color: #A8E9FB;
+            text-decoration: none;
+        }
+        /*a:hover,a:focus {
+            transform: translateY(-5px);
+        }*/
     </style>
 </head>
 <body>
+    <script src="~/Scripts/jquery-3.6.0.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/jquery.cookie.min.js"></script>
+    <link href="~/css/alert.min.css" rel="stylesheet" />
+    <link href="~/css/alert.ani.min.css" rel="stylesheet" />
+    <script src="~/js/zepto.min.js"></script>
+    <script src="~/js/TipBox.js"></script>
+    <script src="~/js/alert.min.js"></script>
+    
 
     <header class="d-flex  flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-            <img src="~/Image/logo.png"  class="bi me-2" width="300" height="75"><use xlink:href="~/Music/Index" />
+            <img src="~/Image/logo.png" class="bi me-2" width="300" height="75"><use xlink:href="~/Music/Index" />
         </a>
         @if (Session["UserId"] == null)
         {
@@ -78,16 +105,16 @@
 
             <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 search-bar" action="~/Music/Search">
                 <input type="search" id="searchBar" name="s" class="form-control" placeholder="搜索音乐、歌单、MV、用户..." value="@ViewBag.searched" aria-label="Search">
-                
+
             </form>
         }
         @if (Session["UserId"] == null)
         {
-    <div class="col-md-3 text-end">
-        <a href="~/User/Login" type="button" class="btn btn-outline-primary me-2">登录</a>
-        <a href="~/Admin/AdminLogin" type="button" class="btn btn-outline-primary me-2">管理员登录</a>
+            <div class="col-md-3 text-end">
+                <button onclick="window.location.href='/LSR/User/Login'" type="button" class="btn btn-outline-primary me-2">登录</button>
+                <button onclick="window.location.href='/LSR/Admin/AdminLogin'" type="button" class="btn btn-outline-primary me-2">管理员登录</button>
 
-    </div>
+            </div>
         }
         else
         {
@@ -96,11 +123,9 @@
                     <img src="@Session["AvatarBase64"]" alt="mdo" width="50" height="50" class="rounded-circle">
                 </a>
                 <ul class="dropdown-menu text-small " aria-labelledby="dropdownUser1">
-                    <li><a class="dropdown-item" href="~/User/Edit">个人中心</a></li>
-                    <li><a class="dropdown-item" href="~/Admin/UserMusic?UserId=@Session["UserId"]">已上传歌曲</a></li>
-                    <li><a class="dropdown-item" href="#">我的收藏</a></li>
-                    <li><hr class="dropdown-divider cai "></li>
-                    <li><a class="dropdown-item" href="~/Music/Index?Logout=true">注销</a></li>
+                    <li><a class="dropdown-item" href="~/User/Main?s=@Session["UserId"]&Type=2"><i class="bi bi-person-circle"></i>  个人中心</a></li>
+                    <li><a class="dropdown-item" href="~/User/Edit?s=@Session["UserId"]"><i class="bi bi-gear"></i>  设置</a></li>
+                    <li><a class="dropdown-item" href="~/Music/Index?Logout=true"><i class="bi bi-box-arrow-right"></i>  注销</a></li>
                 </ul>
             </div>
 
@@ -109,9 +134,15 @@
     <div class="container body-content">
         @RenderBody()
     </div>
+    <script type="text/javascript">
+        function DoTipBox(t, s) {
+            new TipBox({ type: t, str: s, setTime: 1500 });
+        }
+    </script>
     @Scripts.Render("~/Scripts/bootstrap.bundle.min.js")
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/Scripts/jquery-3.6.0.min.js")
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+
     @RenderSection("scripts", required: false)
+
 </body>
 </html>

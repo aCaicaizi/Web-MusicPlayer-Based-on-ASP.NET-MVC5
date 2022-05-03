@@ -1,0 +1,17 @@
+﻿@model List<Dictionary<string,string>>
+<link href="~/css/reset.min.css" rel="stylesheet" />
+<link href="~/css/Cards.css" rel="stylesheet" />
+
+            <script type="text/javascript">
+                $(() => {
+                    $('.card-body').addClass("flex-wrap");
+                })
+            </script>
+            @foreach (var item in Model)
+            {            
+                Html.RenderPartial("SingleCard", item);
+            }
+            
+       
+     
+

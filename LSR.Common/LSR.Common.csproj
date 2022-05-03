@@ -49,6 +49,7 @@
     <Compile Include="ImgProcession.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="stringParse.cs" />
     <Compile Include="Upload.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

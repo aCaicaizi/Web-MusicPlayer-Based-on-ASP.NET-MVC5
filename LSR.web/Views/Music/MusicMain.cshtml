@@ -1,0 +1,177 @@
+﻿@model LSR.Models.MusicSet
+@{
+    ViewBag.Title = "MusicMain";
+    Layout = "~/Views/Shared/Player_Layout.cshtml";
+}
+<style>
+    .MusicMain > *, .MusicMain {
+        border: 0;
+    }
+    .containerCard{
+        max-width:75%;
+        margin-right:auto;
+        margin-left:auto;
+    }
+    .MusicMain {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+        .MusicMain > a > img {
+            width: 200px;
+            aspect-ratio: 1/1;
+        }
+
+    .nl {
+        display: block;
+    }
+    .Inline{
+        display:inline-block;
+    }
+    .mr {
+        margin-right: 50px;
+    }
+
+    .Music-Info {
+        display: inline-block;
+        margin-left: 10px;
+    }
+
+    h {
+        display: block;
+        margin-right: 10px;
+        font-size: 300%;
+        font-weight: 500;
+    }
+
+    .fs-title {
+        font-size: 150%;
+    }
+
+    .fs-info {
+        font-size: 120%
+    }
+
+    .BtnDiv {
+        margin-top: 10px;
+    }
+    .m-btn{
+        margin-left:20px;
+    }
+    h2 {
+        color:#0d6efd;
+    }
+    textarea {
+        
+        border-radius: 2px;
+        border: 1px solid #3eacff;
+        color: #6a6f77;
+        margin-left:auto;
+        margin-right:auto;
+        display: block;
+        outline: 0;
+        padding: 0 1em;
+        padding-top:0.5em;
+        text-decoration: none;
+        width: 100%;
+        height:100px;
+        text-align:start;
+        overflow:hidden;
+        resize:none;
+    }
+    .heartBtnOn {
+        color: red;
+        /*font-size: 25px;*/
+    }
+    .Add_Sheet, .Add_Like {
+        color: #0d6efd;
+    }
+</style>
+<div class="containerCard">
+    <div class="MusicMain">
+        <a>
+            <img src="@Model.MusicImage" />
+        </a>
+        <div class="Music-Info nl">
+            <h>
+                @Model.MusicName
+            </h>
+            <a href="../Music/Main?Type=2&s=@Model.ArtistId" class="mr fs-title"><i class="bi bi-person-circle"></i>  @Model.ArtistSet.Name</a>
+            <a href="../Music/Main?Type=3&s=@Model.AlbumId" class="mr nl fs-info">专辑: @Model.AlbumSet.Name</a>
+            <p class="mr nl fs-info">风格: @Model.MusicStyle</p>
+            <a href="#" class="mr nl fs-info">上传者: @Model.User_InfoSet.UserName</a>
+
+        </div>
+
+    </div>
+    <div class="BtnDiv">
+        <div class="BtnDiv m-btn Inline">
+            <button type="button" class="btn btn-primary" onclick="window.open()"><i class="bi bi-play"></i> 播放</button>
+        </div>
+        <div class="BtnDiv m-btn Inline">
+            @Ajax.ActionLink(" ", "DisplaySheet", "Music", new { s = Model.MusicId, Type = 1 }, new AjaxOptions { UpdateTargetId = "dropdownMenuUl_" + Model.MusicId, InsertionMode = InsertionMode.Replace }, new { @class = "Add_Sheet btn btn-outline-primary", id = "dropdownMenuClickableInside", data_bs_toggle = "dropdown", data_bs_auto_close = "outside", aria_expanded = "false", type = "button" })
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" id="dropdownMenuUl_@Model.MusicId">
+            </ul>
+        </div>
+        <div class="BtnDiv m-btn Inline">
+            @Ajax.ActionLink(" ", "AddLike", "Music", new { s = Model.MusicId, Type = 1 }, new AjaxOptions
+               { HttpMethod = "GET", OnSuccess = "Add_Like_Suc_Func(" + Model.MusicId + ")" }, new { @class = "Add_Like btn btn-outline-primary", type = "button" })
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(() => {
+            $('.Add_Sheet').append('<i class="bi bi-plus addBtn"></i> 添加到');
+        @{
+                var userId =Html.Action("CreateSessionWithCookie").ToString();
+
+                if ((_ = Model.User_Music_Like_rel.FirstOrDefault(m => m.UserId.ToString() == userId)) == null)
+                {
+                <text>
+        $('.Add_Like').append('<i class="bi bi-heart "></i> 收藏');
+                </text>
+                }
+                else
+                {
+                <text>
+        $('.Add_Like').append('<i class="bi bi-heart-fill heartBtnOn "></i> 收藏');
+                </text>
+                }
+        }
+        })
+
+        function Add_Like_Suc_Func(e) {
+            //let Src = $('#Music_' + e + '>.Add_Like>img').attr('src');
+            //if (Src == '../icons/suit-heart.svg') $('#Music_' + e + '>.Add_Like>img').attr('src', '../icons/suit-heart-fill.svg');
+            //else $('#Music_' + e + '>.Add_Like>img').attr('src', '../icons/suit-heart.svg');
+            $('.Add_Like>i').toggleClass("heartBtnOn");
+            $('.Add_Like>i').toggleClass("bi-heart");
+            $('.Add_Like>i').toggleClass("bi-heart-fill");
+        }
+    </script>
+    @if (!string.IsNullOrEmpty(Model.MusicLyrics))
+    {
+        <div class="BtnDiv">
+            <h2>
+                歌词
+            </h2>
+            <div>
+                @Html.Action("ShowLyrics", new { s = Model.MusicId })
+            </div>
+        </div>
+        <hr />
+    }
+
+    <div>
+        <h2>
+            评论
+        </h2>
+        <div>
+            @*<input id="InputSheet" type="text" name="SheetName" required="required" placeholder="快来评论一下吧~">*@
+            <textarea id="CommentText" name="Comment" placeholder="快来评论一下吧~"></textarea>
+            <button type="button" class="btn btn-primary pull-right mt-1">发表评论</button>
+        </div>
+    </div>
+</div>

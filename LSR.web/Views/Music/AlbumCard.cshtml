@@ -1,0 +1,74 @@
+﻿@model LSR.Models.AlbumSet
+<style>
+    .littleCard > *, .littleCard {
+        border: 0;
+    }
+
+    .littleCard {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+        .littleCard > a > img {
+            width: 96px;
+            aspect-ratio: 1/1;
+            
+        }
+
+    .mr {
+        margin-right: 20px;
+    }
+
+    .Artist-Info {
+        display: inline-block;
+        margin-left: 10px;
+    }
+
+    h2 {
+        display: inline;
+        margin-right: 10px;
+        font-size: 120%;
+        font-weight: 500;
+    }
+
+    .BtnDiv {
+        margin-top: 10px;
+    }
+</style>
+<div class="littleCard">
+    <a href="../Music/Main?Type=3&s=@Model.AlbumId" class=""><img src="@Model.Image"></a>
+    <div class="Artist-Info">
+        <div>
+            <h2>
+                <a href="../Music/Main?Type=3&s=@Model.AlbumId" class="">@Model.Name</a>
+            </h2>
+            
+        </div>
+        <div class="BtnDiv">
+            <button type="button" class="btn btn-primary">播放全部</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function playAllBtn() {
+        if ($.cookie('PlayerWindowName') == null)
+            PlayerPage = window.open('/LSR/Player/Main?s=' + e + '&Type=' + t, 'PlayerPage');
+        else {
+            PlayerPage = window.open('', 'PlayerPage')
+            PlayerPage.PlayOneNow(e);
+            PlayerPage.focus();
+        }
+        $.ajax({
+            url: '/LSR/Music/PlayNow',
+            data: 's=@Model.AlbumId?Type=2',
+            type: 'post',
+            success: data => {
+                eval(data);
+            },
+            error: data => {
+                DoTipBox('error', '播放失败！')
+            }
+        });
+    }
+</script>

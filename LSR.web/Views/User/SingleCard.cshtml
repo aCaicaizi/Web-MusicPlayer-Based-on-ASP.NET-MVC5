@@ -1,0 +1,35 @@
+﻿@model Dictionary<string, string>
+
+@switch (int.Parse(Model["Type"]))
+{
+    case 1:
+        {
+            <div class="usercard-list">
+                <figure class="usercard-image">
+                    <a href="../User/Main?Type=1&s=@Model["Id"]">
+                        <img src="@Model["ImageUrl"]" alt="An orange painted blue, cut in half laying on a blue background" />
+
+                    </a>
+                </figure>
+                <div class="card-header_">
+                    @Html.ActionLink(Model["Content"], "Main", "User", new { Type = 1, s = Model["Id"] }, new { })
+                    <div class="usercard-small"><small id="FanCount_@Model["Id"]">@Html.Action("GetFanCountString", new { s=Model["Id"]})人关注</small></div>
+                </div>
+                <div>
+                    @Ajax.ActionLink(" ", "ToggleFollow", "User",
+                                   new { s = Model["Id"],type=2 },
+                                   new AjaxOptions
+                                   {
+                                       OnSuccess = $"FollowBtn({Model["Id"]})",
+                                       HttpMethod = "GET",
+                                       UpdateTargetId = $"FanCount_{Model["Id"]}",
+                                       InsertionMode = InsertionMode.Replace
+                                   },
+                                   new { id = $"FollowBtn_{Model["Id"]}", type = "button", @class = "follow-btn btn btn-sm" }
+                                   )
+                </div>
+            </div>
+
+            break;
+        }
+}

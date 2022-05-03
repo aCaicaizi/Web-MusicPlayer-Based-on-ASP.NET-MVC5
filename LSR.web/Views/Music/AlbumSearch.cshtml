@@ -1,23 +1,133 @@
 ﻿@model IEnumerable<LSR.Models.AlbumSet>
 
-<div class="table-responsive">
-    <table class="table table-striped table-sm">
-        <thead>
-            <tr>
-                <th scope="col">@Html.DisplayNameFor(m => m.Name)</th>
-                <th scope="col">@Html.DisplayNameFor(m => m.ArtistSet.Name)</th>
-                <th scope="col">@Html.DisplayNameFor(m => m.PublishDate)</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.ArtistSet.Name</td>
-                    <td>@item.PublishDate.Date</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<style>
+    
+
+    .W25 {
+        width: 25px;
+    }
+
+    .W35 {
+        width: 35px;
+    }
+
+    .playBtn {
+        color: darkgray;
+        font-size: 25px;
+    }
+
+    .downloadBtn {
+        color: darkgray;
+        font-size: 25px;
+    }
+
+    .addBtn {
+        color: darkgray;
+        font-size: 25px;
+    }
+
+    .heartBtnOn {
+        color: red;
+        font-size: 25px;
+    }
+
+    .heartBtn {
+        font-size: 25px;
+        color: darkgray;
+    }
+
+    .card-body > ul {
+        min-height: 400px;
+    }
+
+    .btnGroup {
+        opacity: 0;
+    }
+
+        .btnGroup:hover {
+            opacity: 1;
+        }
+
+    strong {
+        font-size: 120%;
+
+    }
+    .tb-head>div>div{
+        align-items:start;
+    }
+    .AlbumImg {
+        display: block;
+        width: 50px;
+        aspect-ratio: 1/1;
+        border-radius: 0;
+    }
+    .Inline{
+        display:inline-block !important;
+    }
+    .li-mb{
+        padding:1.5rem 1rem;
+    }
+    .list-group-item{
+        padding:1rem 1rem !important;
+    }
+    .pd-top-12{
+        padding-top:12px;
+    }
+</style>
+<ul class="list-group list-group-flush">
+    <li class="list-group-item tb-head">   
+        <div class="row ">
+            <div class="col-md-6 card-text"><strong>@Html.DisplayNameFor(m => m.Name)</strong></div>
+            <div class="col-md-1 card-text"></div>
+            <div class="col-md-3 card-text"><strong>@Html.DisplayNameFor(m => m.ArtistSet.Name)</strong></div>
+            <div class="col-md-2 card-text text-end"><strong>@Html.DisplayNameFor(m => m.PublishDate)</strong></div>
+        </div>
+    </li>
+    @foreach (var item in Model)
+    {
+        <li class="list-group-item li-mb">
+            <div class="row">
+                <div class="col-md-6 card-text">
+                    <a href="../Music/Main?Type=3&s=@item.AlbumId" class="">
+                        <img class="AlbumImg Inline" src="@item.Image">
+                        <div class="Inline">@item.Name</div>
+                    </a>
+                </div>
+                <div class="col-md-1 card-text btnGroup" id="Album_@item.AlbumId">
+                    <a href="javascript:goPlaying(@item.AlbumId)" class="Play_Music"><i class="bi bi-play-circle playBtn "></i></a>                   
+                    @Ajax.ActionLink(" ", "DisplaySheet", "Music", new { s = item.AlbumId, Type = 2 }, new AjaxOptions { UpdateTargetId = "dropdownMenuUl_" + item.AlbumId, InsertionMode = InsertionMode.Replace }, new { @class = "Add_Sheet", id = "dropdownMenuClickableInside", data_bs_toggle = "dropdown", data_bs_auto_close = "outside", aria_expanded = "false" })
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" id="dropdownMenuUl_@item.AlbumId">
+                    </ul>
+                </div>
+                <div class="col-md-3 card-text pd-top-12">@Html.ActionLink(item.ArtistSet.Name, "Main", "Music", new { Type = 2, s = item.ArtistId }, new { })</div>
+                <div class="col-md-2 card-text pd-top-12 text-end">
+                    <a>
+                        @{
+                            var y = item.PublishDate.Year;
+                            var m = item.PublishDate.Month < 10 ? "0" + item.PublishDate.Month : item.PublishDate.Month.ToString();
+                            var d = item.PublishDate.Day < 10 ? "0" + item.PublishDate.Day : item.PublishDate.Day.ToString();
+                            var ymd = $"{y}-{m}-{d}";
+                            <text>@ymd</text>
+
+                        }
+                    </a>
+                </div>
+
+
 </div>
+
+</li>
+    }
+</ul>
+
+<script type="text/javascript">
+    $(() => {
+        $('.Add_Sheet').append('<i class="bi bi-plus-square addBtn"></i>');        
+    })       
+    function goPlaying(e) {
+        if ($.cookie('IsPlaying') == null || $.cookie('IsPlaying') == '') window.open('../Music/Play?MusicId='+e, '_blank');
+        else $.ajax({
+
+        })
+    }
+</script>

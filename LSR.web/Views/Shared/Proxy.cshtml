@@ -1,0 +1,26 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+    <script type="text/javascript">
+        $(() => {
+            if (window.parent.name != "msg") {
+                window.location.href = "~/Music/Play";//这才是你的显示页面
+            }
+            else {
+                window.parent.focus();
+            }
+        })
+    </script>
+    </div>
+</body>
+</html>

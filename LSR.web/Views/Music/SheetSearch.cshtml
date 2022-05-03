@@ -1,0 +1,177 @@
+﻿@model IEnumerable<LSR.Models.MusicSheetSet>
+
+<style>
+
+
+    .W25 {
+        width: 25px;
+    }
+
+    .W35 {
+        width: 35px;
+    }
+
+    .playBtn {
+        color: darkgray;
+        font-size: 25px;
+    }
+
+    .downloadBtn {
+        color: darkgray;
+        font-size: 25px;
+    }
+
+    .addBtn {
+        color: darkgray;
+        font-size: 25px;
+    }
+
+    .heartBtnOn {
+        color: red;
+        font-size: 25px;
+    }
+
+    .heartBtn {
+        font-size: 25px;
+        color: darkgray;
+    }
+
+    .card-body > ul {
+        min-height: 400px;
+    }
+
+    .btnGroup {
+        opacity: 0;
+    }
+
+        .btnGroup:hover {
+            opacity: 1;
+        }
+
+    strong {
+        font-size: 120%;
+    }
+
+    .tb-head > div > div {
+        align-items: start;
+    }
+
+    .SheetImg {
+        display: block;
+        width: 50px;
+        aspect-ratio: 1/1;
+        border-radius: 0;
+    }
+
+    .Inline {
+        display: inline-block !important;
+    }
+
+    .li-mb {
+        padding: 1.5rem 1rem;
+    }
+
+    .list-group-item {
+        padding: 1rem 1rem !important;
+    }
+
+    .pd-top-12 {
+        padding-top: 12px;
+    }
+</style>
+<ul class="list-group list-group-flush">
+    <li class="list-group-item tb-head">
+        <div class="row ">
+            <div class="col-md-5 card-text"><strong>@Html.DisplayNameFor(m => m.Name)</strong></div>
+            <div class="col-md-2 card-text"></div>
+            <div class="col-md-3 card-text"><strong>创建人</strong></div>
+            <div class="col-md-2 card-text text-end"><strong>@Html.DisplayNameFor(m => m.SetDate)</strong></div>
+        </div>
+    </li>
+    @foreach (var item in Model)
+    {
+        <li class="list-group-item li-mb">
+            <div class="row">
+                <div class="col-md-5 card-text">
+                    <a href="../Music/Main?Type=6&s=@item.MusicSheetId" class="">
+                        <img class="SheetImg Inline" src="@item.Image">
+                        <div class="Inline">@item.Name</div>
+                    </a>
+                </div>
+                <div class="col-md-2 card-text btnGroup" id="Sheet_@item.MusicSheetId">
+                    <a href="javascript:goPlaying(@item.MusicSheetId)" class="Play_Music"><i class="bi bi-play-circle playBtn "></i></a>
+                    @Ajax.ActionLink(" ", "AddLike", "Music", new { s = item.MusicSheetId, Type = 4 }, new AjaxOptions
+               { HttpMethod = "GET", OnSuccess = "Add_Like_Suc_Func(" + item.MusicSheetId + ")" }, new { @class = "Add_Like" })
+
+                    @Ajax.ActionLink(" ", "DisplaySheet", "Music", new { s = item.MusicSheetId, Type = 2 }, new AjaxOptions { UpdateTargetId = "dropdownMenuUl_" + item.MusicSheetId, InsertionMode = InsertionMode.Replace }, new { @class = "Add_Sheet", id = "dropdownMenuClickableInside", data_bs_toggle = "dropdown", data_bs_auto_close = "outside", aria_expanded = "false" })
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" id="dropdownMenuUl_@item.MusicSheetId">
+                    </ul>
+                </div>
+                <div class="col-md-3 card-text pd-top-12"><a href="../User/Main?Type=2&s=@item.UserId">@item.User_InfoSet.UserName</a></div>
+                <div class="col-md-2 card-text pd-top-12 text-end">
+                    <a>
+                        @{
+                            var y = item.SetDate.Year;
+                            var m = item.SetDate.Month < 10 ? "0" + item.SetDate.Month : item.SetDate.Month.ToString();
+                            var d = item.SetDate.Day < 10 ? "0" + item.SetDate.Day : item.SetDate.Day.ToString();
+                            var ymd = $"{y}-{m}-{d}";
+                            <text>@ymd</text>
+
+                        }
+                    </a>
+                </div>
+
+
+            </div>
+
+        </li>
+    }
+</ul>
+
+<script type="text/javascript">
+    $(() => {
+
+        $('.Add_Sheet').append('<i class="bi bi-plus-square addBtn"></i>');
+         @{
+            var userId =Html.Action("CreateSessionWithCookie").ToString();
+            foreach (var item in Model)
+            {
+                if ((_ = item.User_MusicSheet_rel.FirstOrDefault(m => m.UserId.ToString() == userId)) == null)
+                {
+                <text>
+        $('#Sheet_@item.MusicSheetId>.Add_Like').append('<i class="bi bi-heart heartBtn "></i>');
+                </text>
+                }
+                else
+                {
+                <text>
+    $('#Sheet_@item.MusicSheetId>.Add_Like').append('<i class="bi bi-heart-fill heartBtnOn "></i>');
+                </text>
+                }
+        }
+        }
+    })
+    function goPlaying(e) {
+        if ($.cookie('IsPlaying') == null || $.cookie('IsPlaying') == '') window.open('../Music/Play?MusicId='+e, '_blank');
+        else $.ajax({
+
+        })
+    }
+
+    function Add_Like_Suc_Func(e) {
+        //let Src = $('#Music_' + e + '>.Add_Like>img').attr('src');
+        //if (Src == '../icons/suit-heart.svg') $('#Music_' + e + '>.Add_Like>img').attr('src', '../icons/suit-heart-fill.svg');
+        //else $('#Music_' + e + '>.Add_Like>img').attr('src', '../icons/suit-heart.svg');
+        var t = $('#Sheet_' + e + '>.Add_Like>i');
+        if (t.is('.heartBtnOn')) {
+            DoTipBox('success', '取消收藏成功');
+        }
+        else DoTipBox('success', '收藏成功');
+        t.toggleClass("heartBtn");
+        t.toggleClass("heartBtnOn");
+        t.toggleClass("bi-heart");
+        t.toggleClass("bi-heart-fill");
+        $('#MyLike_' + e).toggleClass('disabled');
+
+    }
+</script>

@@ -23,14 +23,19 @@ namespace LSR.Models
         }
     
         public long ArtistId { get; set; }
-
-        [Display(Name ="歌手")]
+        [Display(Name = "歌手")]
         public string Name { get; set; }
         public string Info { get; set; }
         public string Image { get; set; }
-    
+        public string Region { get; set; }
+        public string Gender { get; set; }
+        public Nullable<int> StyleId { get; set; }
+        public Nullable<bool> IsChecked { get; set; }
+        public string Initial { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AlbumSet> AlbumSet { get; set; }
+        public virtual StyleSet StyleSet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MusicSet> MusicSet { get; set; }
     }

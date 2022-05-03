@@ -136,6 +136,9 @@
     <Compile Include="Models\ArtistSet.cs">
       <DependentUpon>LSR.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CheckSet.cs">
+      <DependentUpon>LSR.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CommentSet.cs">
       <DependentUpon>LSR.tt</DependentUpon>
     </Compile>
@@ -166,7 +169,7 @@
     <Compile Include="Models\MVSet.cs">
       <DependentUpon>LSR.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\sysdiagrams.cs">
+    <Compile Include="Models\StyleSet.cs">
       <DependentUpon>LSR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User_InfoSet.cs">
@@ -203,6 +206,7 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="css\alert.ani.min.css" />
     <Content Include="css\alert.min.css" />
+    <Content Include="css\Cards.css" />
     <Content Include="css\DownloadBtn.css" />
     <Content Include="css\font\bootstrap-icons.css" />
     <Content Include="css\font\index.html" />
@@ -211,6 +215,9 @@
     <Content Include="css\ImageBox.css" />
     <Content Include="css\player.css" />
     <Content Include="css\reset.css" />
+    <Content Include="css\reset.min.css" />
+    <Content Include="css\thePlayer.css" />
+    <Content Include="css\tiktok.css" />
     <Content Include="css\TipBox.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -233,9 +240,15 @@
     <Content Include="Image\陶喆.jpg" />
     <Content Include="Image\韩磊.jpg" />
     <Content Include="js\alert.min.js" />
+    <Content Include="js\amplitude.js" />
+    <Content Include="js\aplayer.js" />
     <Content Include="js\CropBox.js" />
     <Content Include="js\jsmediatags.min.js" />
+    <Content Include="js\Lyrics.js" />
     <Content Include="js\player.js" />
+    <Content Include="css\style.css" />
+    <Content Include="js\PlayListCard.js" />
+    <Content Include="js\thePlayer.js" />
     <Content Include="js\TipBox.js" />
     <Content Include="js\Upload.js" />
     <Content Include="js\utill.js" />
@@ -301,6 +314,7 @@
     <Content Include="Scripts\jquery-3.6.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.6.0.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.cookie.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -309,6 +323,7 @@
     <Content Include="Scripts\Meting.js" />
     <Content Include="Scripts\Meting.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\particle-1.1.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -345,10 +360,27 @@
     <Content Include="Views\User\UserSearch.cshtml" />
     <Content Include="Views\Music\AlbumSearch.cshtml" />
     <Content Include="Views\Music\LyricsSearch.cshtml" />
-    <Content Include="Views\Player\Main.cshtml" />
+    <Content Include="Views\Music\Player.cshtml" />
     <Content Include="Views\Shared\SinglePlayer_Layout.cshtml" />
     <Content Include="Views\Music\DisplaySheet.cshtml" />
     <Content Include="Views\Music\ArtistCard.cshtml" />
+    <Content Include="Views\Music\AlbumCard.cshtml" />
+    <Content Include="Views\Shared\Proxy.cshtml" />
+    <Content Include="Views\Music\MusicMain.cshtml" />
+    <Content Include="Views\Music\AlbumMain.cshtml" />
+    <Content Include="Views\Music\ArtistMain.cshtml" />
+    <Content Include="Views\Music\ShowLyrics.cshtml" />
+    <Content Include="Views\Music\SheetSearch.cshtml" />
+    <Content Include="Views\Music\SheetMain.cshtml" />
+    <Content Include="Views\Player\LyricsPage.cshtml" />
+    <Content Include="Views\User\Main.cshtml" />
+    <Content Include="Views\Music\SingleCard.cshtml" />
+    <Content Include="Views\Music\SearchCardView.cshtml" />
+    <Content Include="Views\User\SearchCardVIew.cshtml" />
+    <Content Include="Views\User\SingleCard.cshtml" />
+    <Content Include="Views\Player\ListPage.cshtml" />
+    <Content Include="Views\Music\SearchLibrary.cshtml" />
+    <Content Include="Views\Music\SelectBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -387,8 +419,6 @@
           <DevelopmentServerPort>50396</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/LSR</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/LSR</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

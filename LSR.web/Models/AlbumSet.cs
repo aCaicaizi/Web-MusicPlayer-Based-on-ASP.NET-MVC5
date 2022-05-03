@@ -23,12 +23,15 @@ namespace LSR.Models
     
         public long AlbumId { get; set; }
         public long ArtistId { get; set; }
+        [Display(Name = "发行日期")]
         public System.DateTime PublishDate { get; set; }
         public string Info { get; set; }
-
+        
         [Display(Name = "专辑")]
         public string Name { get; set; }
         public string Image { get; set; }
+        public Nullable<bool> IsChecked { get; set; }
+        public Nullable<bool> IsAvailable { get; set; }
     
         public virtual ArtistSet ArtistSet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

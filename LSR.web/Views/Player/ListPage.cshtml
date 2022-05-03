@@ -1,0 +1,40 @@
+﻿@model List<LSR.Models.MusicSet>
+
+@foreach (var item in Model)
+{
+    <li class=" li-mb row" id="Music_@item.MusicId">
+        @*<div class="row">*@
+        <div class="col-md-1"><input type="checkbox" id="checkbox_@item.MusicId" />&nbsp;&nbsp;@Model.IndexOf(item)</div>
+        <div class="col-md-4">@Html.ActionLink(item.MusicName, "Main", "Music", new { Type = 1, s = item.MusicId }, new { })</div>
+        <div class="col-md-2 btnGroup">
+            @*播放音乐*@
+            @*@Html.ActionLink(" ", "Play", "Music", new { MusicId = item.MusicId }, new { @class = "Play_Music", target = "_blank" })*@
+            <a href="javascript:goPlaying(@item.MusicId)" class="Play_Music"><i class="bi bi-play-circle playBtn "></i></a>
+            @*添加喜欢收藏*@
+            @Ajax.ActionLink(" ", "AddLike", "Music", new { s = item.MusicId, Type = 1 }, new AjaxOptions
+       { HttpMethod = "GET", OnSuccess = "Add_Like_Suc_Func(" + item.MusicId + ")" }, new { @class = "Add_Like" })
+            @*下载*@
+            @*@Html.ActionLink(" ", "Download", "Music", new { MusicId = item.MusicId }, new AjaxOptions { OnSuccess = "DownloadConfirm(" + item.MusicId + ")", HttpMethod = "POST" }, new { @class = "Download", })*@
+            <a href="#" onclick="Download(@item.MusicId)" class="Download"></a>
+            @*添加歌单等下拉菜单*@
+            @Ajax.ActionLink(" ", "DisplaySheet", "Music", new { s = item.MusicId, Type = 1 }, new AjaxOptions { UpdateTargetId = "dropdownMenuUl_" + item.MusicId, InsertionMode = InsertionMode.Replace }, new { @class = "Add_Sheet", id = "dropdownMenuClickableInside", data_bs_toggle = "dropdown", data_bs_auto_close = "outside", aria_expanded = "false" })
+            <ul class="dropdown-menu text" aria-labelledby="dropdownMenuClickableInside" id="dropdownMenuUl_@item.MusicId">
+            </ul>
+
+        </div>
+        <div class="col-md-3">@Html.ActionLink(item.ArtistSet.Name, "Main", "Music", new { Type = 2, s = item.ArtistId }, new { })</div>
+        @*<div class="col-md-4 ">@Html.ActionLink(item.AlbumSet.Name, "Main", "Music", new { Type = 3, s = item.AlbumId }, new { })</div>*@
+        <div class="col-md-2">
+            @{
+                var dm = ((TimeSpan)item.MusicDuration).Minutes;
+                var ds = ((TimeSpan)item.MusicDuration).Seconds;
+                string min = dm < 10 ? "0" + dm.ToString() : dm.ToString();
+                string sec = ds < 10 ? "0" + ds.ToString() : ds.ToString();
+
+                <text>@min:@sec</text>
+            }
+        </div>
+        @*</div>*@
+    </li>
+}
+

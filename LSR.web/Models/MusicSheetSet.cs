@@ -11,7 +11,8 @@ namespace LSR.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class MusicSheetSet
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,16 +23,20 @@ namespace LSR.Models
         }
     
         public long MusicSheetId { get; set; }
+        [Display(Name = "歌单")]
         public string Name { get; set; }
         public string Info { get; set; }
         public long UserId { get; set; }
+        [Display(Name = "创建时间")]
         public System.DateTime SetDate { get; set; }
         public string Image { get; set; }
+        public string Language { get; set; }
+        public Nullable<bool> IsAvailable { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Music_MusicSheet_rel> Music_MusicSheet_rel { get; set; }
+        public virtual User_InfoSet User_InfoSet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User_MusicSheet_rel> User_MusicSheet_rel { get; set; }
-        public virtual User_InfoSet User_InfoSet { get; set; }
     }
 }

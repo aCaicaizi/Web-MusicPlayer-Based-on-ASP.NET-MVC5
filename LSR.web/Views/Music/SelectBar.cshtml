@@ -1,0 +1,71 @@
+﻿@model Dictionary<string, int>
+<div class="box">
+    @switch (Model["type"])
+    {
+
+
+
+        case 1:
+            {
+                <ul class="ul" id="Letter">
+                    <li class="act" name="0">全部</li>
+                    @{
+                        string diction = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#";
+                        for (var i=0;i<=diction.Length-1;i++)
+                        {
+                            <li name="@diction[i]">@diction[i]</li>
+                        }
+                    }
+                </ul>
+                break;
+            }
+
+        case 2:
+            {
+                <ul class="ul" id="Gender">
+                    <li class="act" name="0">全部</li>
+                    @{
+                        var dictionGender = new List<string> { "男", "女", "组合" };
+                        for(var i=0;i<= dictionGender.Count()-1;i++)
+                        {
+                            <li name="@dictionGender[i]">@dictionGender[i]</li>
+                        }
+                    }
+                </ul>
+                                break;
+                            }
+                        case 3:
+                    {
+<ul class="ul" id="Region">
+    <li class="act" name="0">全部</li>
+    @{
+        var dictionRegion = new List<string> { "内地","港台", "欧美", "日本","韩国" };
+        for (var i= 0; i <= dictionRegion.Count() - 1; i++)
+        {
+            <li name="@dictionRegion[i]">@dictionRegion[i]</li>
+        }
+    }
+</ul>
+                break;
+            }
+        case 4:
+            {
+                string dictionStr = Html.Action("GetStyles", "Music").ToString();
+                var diction = dictionStr.Split(',');
+                <ul class="ul" id="Style">
+                    <li class="act">全部</li>
+                    @{
+
+                        for(var i= 0; i <= diction.Length - 1; i++)
+                        {
+                            <li name="@i">@diction[i]</li>
+                        }
+                    }
+                </ul>
+                break;
+            }
+        default: break;
+    }
+</div>
+
+

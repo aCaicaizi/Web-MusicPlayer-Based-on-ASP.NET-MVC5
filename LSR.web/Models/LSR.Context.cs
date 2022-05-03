@@ -28,12 +28,13 @@ namespace LSR.Models
         public virtual DbSet<AdminSet> AdminSet { get; set; }
         public virtual DbSet<AlbumSet> AlbumSet { get; set; }
         public virtual DbSet<ArtistSet> ArtistSet { get; set; }
+        public virtual DbSet<CheckSet> CheckSet { get; set; }
         public virtual DbSet<CommentSet> CommentSet { get; set; }
         public virtual DbSet<Music_MusicSheet_rel> Music_MusicSheet_rel { get; set; }
         public virtual DbSet<MusicSet> MusicSet { get; set; }
         public virtual DbSet<MusicSheetSet> MusicSheetSet { get; set; }
         public virtual DbSet<MVSet> MVSet { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<StyleSet> StyleSet { get; set; }
         public virtual DbSet<User_InfoSet> User_InfoSet { get; set; }
         public virtual DbSet<User_Music_Like_rel> User_Music_Like_rel { get; set; }
         public virtual DbSet<User_MusicSheet_rel> User_MusicSheet_rel { get; set; }

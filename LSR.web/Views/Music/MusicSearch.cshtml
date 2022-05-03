@@ -1,109 +1,152 @@
 ﻿@model IEnumerable<LSR.Models.MusicSet>
 <style>
-    .W25{
-        width:25px;
+
+
+    .W25 {
+        width: 25px;
     }
-    .W35{
-        width:35px;
+
+    .W35 {
+        width: 35px;
     }
-    .playBtn{
+
+    .playBtn {
         color: darkgray;
-        font-size:25px;
+        font-size: 25px;
     }
+
     .downloadBtn {
         color: darkgray;
-        font-size:25px;
+        font-size: 25px;
     }
+
     .addBtn {
         color: darkgray;
-        font-size:25px;
+        font-size: 25px;
     }
-    .btnGroup>a{
-        column-span:
-    }
+
     .heartBtnOn {
         color: red;
         font-size: 25px;
     }
+
     .heartBtn {
         font-size: 25px;
-        color:darkgray;
+        color: darkgray;
     }
-    .card-body>ul{
-        min-height:400px;
+
+    .card-body > ul {
+        min-height: 400px;
+    }
+
+    .btnGroup {
+        opacity: 0;
+    }
+
+        .btnGroup:hover {
+            opacity: 1;
+        }
+
+    strong {
+        font-size: 120%;
+    }
+
+    .tb-head > div > div {
+        align-items: start;
+    }
+
+    .SheetImg {
+        display: block;
+        width: 50px;
+        aspect-ratio: 1/1;
+        border-radius: 0;
+    }
+
+    .Inline {
+        display: inline-block !important;
+    }
+
+    .li-mb {
+        padding: 1.5rem 1rem;
+    }
+
+    .list-group-item {
+        padding: 1rem 1rem !important;
+    }
+
+    .pd-top-12 {
+        padding-top: 12px;
     }
 </style>
 <link href="~/css/TipBox.css" rel="stylesheet" />
 @*<div class="table-responsive">
     <div class="table table-striped table-sm">*@
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-                <div class="row">
-                    <div class="col-md-3 card-text">@Html.DisplayNameFor(m => m.MusicName)</div>
-                    <div class="col-md-3 card-text"></div>
-                    <div class="col-md-2 card-text">@Html.DisplayNameFor(m => m.ArtistSet.Name)</div>
-                    <div class="col-md-2 card-text">@Html.DisplayNameFor(m => m.AlbumSet.Name)</div>
-                    <div class="col-md-2 card-text">@Html.DisplayNameFor(m => m.MusicDuration)</div>
-                </div>
-            </li>
-            @foreach (var item in Model)
-            {
-        <li class="list-group-item">
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col-md-3 card-text"><strong>@Html.DisplayNameFor(m => m.MusicName)</strong></div>
+            <div class="col-md-2 card-text"></div>
+            <div class="col-md-2 card-text"><strong>@Html.DisplayNameFor(m => m.ArtistSet.Name)</strong></div>
+            <div class="col-md-4 card-text"><strong>@Html.DisplayNameFor(m => m.AlbumSet.Name)</strong></div>
+            <div class="col-md-1 card-text "><strong>@Html.DisplayNameFor(m => m.MusicDuration)</strong></div>
+        </div>
+    </li>
+    @foreach (var item in Model)
+    {
+        
+        <li class="list-group-item li-mb">
             <div class="row">
-                <div class="col-md-3 card-text">@item.MusicName</div>
-                <div class="col-md-3 card-text btnGroup" id="Music_@item.MusicId">
+                <div class="col-md-3 card-text">@Html.ActionLink(item.MusicName, "Main", "Music", new { Type=1,s=item.MusicId}, new { })</div>
+                <div class="col-md-2 card-text btnGroup" id="Music_@item.MusicId">
                     @*播放音乐*@
-                    @Html.ActionLink(" ", "Play", "Music", new { MusicId = item.MusicId }, new { @class = "Play_Music", target = "_blank" })
-                    @*添加到歌单*@
-
-                    @*@Ajax.ActionLink("","AddPlayList","Music","",new AjaxOptions { }, new {@class="Add_PlayList" })*@
+                    @*@Html.ActionLink(" ", "Play", "Music", new { MusicId = item.MusicId }, new { @class = "Play_Music", target = "_blank" })*@
+                    <a href="javascript:goPlaying(@item.MusicId,1)" class="Play_Music"><i class="bi bi-play-circle playBtn "></i></a>
                     @*添加喜欢收藏*@
-                    @Ajax.ActionLink(" ", "AddLike", "Music", new { MusicId = item.MusicId }, new AjaxOptions
+                    @Ajax.ActionLink(" ", "AddLike", "Music", new { s = item.MusicId, Type=1 }, new AjaxOptions
                { HttpMethod = "GET", OnSuccess = "Add_Like_Suc_Func(" + item.MusicId + ")" }, new { @class = "Add_Like" })
                     @*下载*@
                     @*@Html.ActionLink(" ", "Download", "Music", new { MusicId = item.MusicId }, new AjaxOptions { OnSuccess = "DownloadConfirm(" + item.MusicId + ")", HttpMethod = "POST" }, new { @class = "Download", })*@
                     <a href="#" onclick="Download(@item.MusicId)" class="Download"></a>
-                    
-                    @Ajax.ActionLink(" ", "DisplaySheet", "Music", new { MusicId = item.MusicId },new AjaxOptions { UpdateTargetId= "dropdownMenuUl_"+item.MusicId,InsertionMode=InsertionMode.Replace }, new { @class="Add_Sheet",id = "dropdownMenuClickableInside",data_bs_toggle = "dropdown", data_bs_auto_close = "outside",aria_expanded = "false" })
-                        @*<a href="#" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                            <img src="../icons/plus-square.svg" class="W25"/>
-                            <i class="bi bi-plus-square addBtn"></i>
-                        </a>*@
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" id="dropdownMenuUl_@item.MusicId">                           
-                        </ul>
+                    @*添加歌单等下拉菜单*@
+                    @Ajax.ActionLink(" ", "DisplaySheet", "Music", new { s = item.MusicId,Type=1 }, new AjaxOptions { UpdateTargetId = "dropdownMenuUl_" + item.MusicId, InsertionMode = InsertionMode.Replace }, new { @class = "Add_Sheet", id = "dropdownMenuClickableInside", data_bs_toggle = "dropdown", data_bs_auto_close = "outside", aria_expanded = "false" })
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside" id="dropdownMenuUl_@item.MusicId">
+                    </ul>
 
                 </div>
-                <div class="col-md-2 card-text">@item.ArtistSet.Name</div>
-                <div class="col-md-2 card-text">@item.AlbumSet.Name</div>
-                <div class="col-md-2 card-text">
-                @{ 
-                    var m = ((TimeSpan)item.MusicDuration).Minutes;
-                    var s = ((TimeSpan)item.MusicDuration).Seconds;
-                    if (m < 10) { <text>@("0"+m.ToString()):@s</text>}
-                    else { <text>@m.ToString():@s</text>}
-                }</div>
-             </div>
+                <div class="col-md-2 card-text">@Html.ActionLink(item.ArtistSet.Name, "Main", "Music", new { Type = 2, s = item.ArtistId },new { })</div>
+                <div class="col-md-4 card-text">@Html.ActionLink(item.AlbumSet.Name, "Main", "Music", new { Type = 3, s = item.AlbumId }, new { })</div>
+                <div class="col-md-1 card-text ">
+                    @{
+                        var m = ((TimeSpan)item.MusicDuration).Minutes;
+                        var s = ((TimeSpan)item.MusicDuration).Seconds;
+                        string min = m < 10 ? "0" + m.ToString() : m.ToString();
+                        string sec = s < 10 ? "0" + s.ToString() : s.ToString();
+                        
+                <text>@min:@sec</text>                                 
+                    }
+                </div>
+            </div>
         </li>
 
-            }
-        </ul>
-    @*</div>
-</div>*@
+    }
+</ul>
+@*</div>
+    </div>*@
+
 <script type="text/javascript">
     $(() => {
-        
+
         //let theHeart = '<svg class="two W25" viewBox="0 0 100 100"><path class="heart"    d="M 90,40 a 20 20 0 1 0 -40,-25 a 20 20 0 1 0 -40,25 l 40,50  z" /></svg>';
         //let theHeartOn = '<svg class="two on W25" viewBox="0 0 100 100"><path class="heart"    d="M 90,40 a 20 20 0 1 0 -40,-25 a 20 20 0 1 0 -40,25 l 40,50  z" /></svg>';
 
-        $('.Play_Music').append('<i class="bi bi-play-circle playBtn "></i>');
+        //$('.Play_Music').append('<i class="bi bi-play-circle playBtn "></i>');
         $('.Add_Sheet').append('<i class="bi bi-plus-square addBtn"></i>');
         $('.Download').append('<i class="bi bi-download downloadBtn"></i>');
         @{
-            var userId = ViewBag.UserId;
-            LSR.Models.User_Music_Like_rel log;
-            foreach (var item in Model) 
+            var userId =Html.Action("CreateSessionWithCookie").ToString();
+            foreach (var item in Model)
             {
-                if ((log = item.User_Music_Like_rel.FirstOrDefault(m => m.UserId.ToString() == userId)) == null)
+                if ((_ = item.User_Music_Like_rel.FirstOrDefault(m => m.UserId.ToString() == userId)) == null)
                 {
                 <text>
         $('#Music_@item.MusicId>.Add_Like').append('<i class="bi bi-heart heartBtn "></i>');
@@ -123,10 +166,17 @@
         //let Src = $('#Music_' + e + '>.Add_Like>img').attr('src');
         //if (Src == '../icons/suit-heart.svg') $('#Music_' + e + '>.Add_Like>img').attr('src', '../icons/suit-heart-fill.svg');
         //else $('#Music_' + e + '>.Add_Like>img').attr('src', '../icons/suit-heart.svg');
-        $('#Music_' + e + '>.Add_Like>i').toggleClass("heartBtn");
-        $('#Music_' + e + '>.Add_Like>i').toggleClass("heartBtnOn");
-        $('#Music_' + e + '>.Add_Like>i').toggleClass("bi-heart");
-        $('#Music_' + e + '>.Add_Like>i').toggleClass("bi-heart-fill");
+        var t = $('#Music_' + e + '>.Add_Like>i');
+        if (t.is('.heartBtnOn')) {
+            DoTipBox('success', '取消收藏成功');
+        }
+        else DoTipBox('success', '收藏成功');        
+        t.toggleClass("heartBtn");
+        t.toggleClass("heartBtnOn");
+        t.toggleClass("bi-heart");
+        t.toggleClass("bi-heart-fill");
+        $('#MyLike_' + e).toggleClass('disabled');
+        
     }
     //function Add_Like_Begin(e) {
     //    $('#Music_' + e + '>.Add_Like>img').attr('src', '../icons/hourglass-split.svg');
@@ -144,5 +194,13 @@
     }
     function DownloadConfirm(e) {
         $('#Music_' + e + '>.Download>img').attr('src','../icons/check-square.svg');
+    }
+    var PlayerPage = null;
+    function goPlaying(e,t) {
+        //if ($.cookie('IsPlaying') == null || $.cookie('IsPlaying') == '') window.open('../Music/Play?MusicId='+e, '_blank');
+        //else $.ajax({
+
+        //})
+        
     }
 </script>
